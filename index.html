@@ -40,6 +40,14 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
 @media(max-width:350px){.hud{left:18px;right:18px}.shield-dots{gap:4px;font-size:17px}.metric-value{font-size:27px}.mission{font-size:10px;letter-spacing:1px}.instructions{font-size:11px}}
 @media(max-height:740px){.result-extra{margin-top:7px}.result-title .perfect-word{margin-bottom:5px}}
 @media(max-height:430px) and (orientation:landscape){.result-extra{font-size:9px}}
+/* V2.1: leave the HUD labels clear; keep event feedback near the ship. */
+.timer-track{top:-12px}
+.near-toast,.damage-toast{position:absolute;z-index:2;bottom:auto;left:50%;right:auto;top:74%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;font-size:12px;font-weight:900;letter-spacing:1px;text-align:center}
+.damage-toast{color:#ff9fc6;text-shadow:0 0 14px #ff4c9977}
+.clear .result-subtitle{color:#c3fff1}
+.rare-visitor{font-size:10px;color:#f8df8a;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);letter-spacing:.4px}
+@media(max-height:740px){.rare-visitor{margin-top:6px;padding-top:6px}}
+@media(max-height:590px){.rare-visitor{margin-top:4px;padding-top:4px}.result-subtitle{font-size:11px}}
 </style>
 </head>
 <body>
@@ -53,6 +61,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   <div class="hud" id="hud" hidden><div class="timer-track"><div class="timer-fill" id="timerFill"></div></div><div><div class="metric-label">SCORE</div><div class="metric-value" id="score">0000</div></div><div class="shield-metric" id="shieldMetric"><div class="metric-label">SHIELD</div><div class="shield-dots" id="shieldDots" role="status" aria-label="シールド 残り3"><span id="shield1" aria-hidden="true">◆</span><span id="shield2" aria-hidden="true">◆</span><span id="shield3" aria-hidden="true">◆</span></div></div><div class="time-metric" id="timeMetric"><div class="metric-label">TIME LEFT</div><div class="metric-value"><span id="time">10.0</span><span class="unit">s</span></div></div></div>
   <div class="run-label" id="runLabel" hidden>SURVIVE THE NEON</div>
   <div class="near-toast" id="nearToast" hidden>NEAR! +50</div>
+  <div class="damage-toast" id="damageToast" hidden>SHIELD −1</div>
   <div class="run-hint" id="runHint" hidden>〈 <b>SLIDE TO DODGE</b> 〉</div>
   <section class="overlay" id="startScreen" aria-labelledby="gameTitle">
    <div class="eyebrow"><span class="live-dot"></span> THE 10-SECOND CHALLENGE</div>
@@ -69,7 +78,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <div class="eyebrow" id="resultEyebrow">SO CLOSE. GO AGAIN.</div>
    <h2 class="result-title" id="resultTitle"><span>GAME</span><span>OVER</span></h2>
    <p class="result-subtitle" id="resultSubtitle">あと少し。もう一度、飛び込もう。</p>
-   <div class="score-card"><div class="metric-label">YOUR SCORE</div><div class="total" id="resultScore">0000</div><div class="score-details"><span>生存 <strong id="survival">0.0s</strong></span><span>回避 <strong id="dodged">0</strong></span><span id="bonus">BONUS +0</span></div><div class="result-extra"><span>NEAR <strong id="resultNear">0</strong></span><span>被弾 <strong id="resultHits">0 / 3</strong></span></div></div>
+   <div class="score-card"><div class="metric-label">YOUR SCORE</div><div class="total" id="resultScore">0000</div><div class="score-details"><span>生存 <strong id="survival">0.0s</strong></span><span>回避 <strong id="dodged">0</strong></span><span id="bonus">BONUS +0</span></div><div class="result-extra"><span>NEAR <strong id="resultNear">0</strong></span><span>被弾 <strong id="resultHits">0 / 3</strong></span></div><div class="rare-visitor" id="rareVisitor" hidden></div></div>
    <button class="play-button" id="againButton">PLAY AGAIN <span class="arrow" aria-hidden="true">↗</span></button>
    <div class="result-best" id="resultBest">PERSONAL BEST 0000</div>
   </section>
@@ -77,21 +86,23 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <div class="eyebrow">TAKE A BREATH</div><h2 class="pause-title" id="pauseTitle">PAUSED</h2><p class="pause-text">準備ができたら、続きをどうぞ。<br>残り時間は止まっています。</p><button class="play-button" id="resumeButton">RESUME <span class="arrow" aria-hidden="true">▶</span></button><button class="secondary-button" id="restartButton">RESTART</button>
   </section>
  </section>
- <footer class="footer"><span class="edition">02 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
+ <footer class="footer"><span class="edition">V2.1 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
 </main>
 <script>
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
  const arena = $('arena'), canvas = $('canvas'), ctx = canvas.getContext('2d');
- const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','pauseScreen','pauseButton','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits'].map(id=>[id,$(id)]));
+ const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','pauseScreen','pauseButton','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits','damageToast','rareVisitor'].map(id=>[id,$(id)]));
  const W = 400, H = 680, DURATION = 10, STEP = 1 / 120;
  const MAX_HITS=3, INVULNERABLE=.75, NEAR_MARGIN=12;
+ const RARE_NAMES={banana:'バナナ',donut:'ドーナツ',alien:'エイリアン'};
  const NORMAL_TYPES=['block','meteor','crystal','drone'], RARE_TYPES=['banana','donut','alien'];
  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
  let state='ready', elapsed=0, spawnClock=0, dodges=0, score=0, best=0, muted=false;
  let hits=0, invulnerable=0, shieldPulse=0, warningTime=0, nearCount=0, nearToastTime=0, nearToastPoints=0;
+ let damageToastTime=0, nearAnchorX=W/2, rareSeen='', flybyEffects=[];
  let waveIndex=0, rareWave=-1, rareSpawned=false, pendingSpawns=[], bank=0;
  let player={x:W/2,y:H-112,r:9}, targetX=W/2, obstacles=[], particles=[], keys=new Set();
  let lastFrame=0, accumulator=0, sceneryTime=0, shake=0, burstFlash=0, lastSecond=10;
@@ -130,20 +141,30 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   ui.runLabel.classList.toggle('critical',hits===2);ui.runLabel.classList.toggle('final-stretch',elapsed>=7&&hits<2);
   ui.runLabel.textContent=warningTime>0?'CRITICAL — LAST SHIELD':hits===2?'LAST SHIELD — KEEP GOING':elapsed>=7?'FINAL 3 SECONDS — HOLD ON':'N-01 SPARK / SHIELDS ONLINE';
   ui.nearToast.hidden=nearToastTime<=0||state!=='playing';
+  ui.nearToast.style.left=(clamp(nearAnchorX,70,W-70)/W*100)+'%';ui.nearToast.style.top=((player.y-62)/H*100)+'%';
+  ui.damageToast.hidden=damageToastTime<=0||state!=='playing';ui.damageToast.style.left=(clamp(player.x,65,W-65)/W*100)+'%';ui.damageToast.style.top=((player.y-62)/H*100)+'%';
  }
  function setOverlay(which){for(const key of ['startScreen','resultScreen','pauseScreen'])ui[key].hidden=key!==which;}
  function releasePointer(){if(pointerId!==null&&arena.hasPointerCapture(pointerId))arena.releasePointerCapture(pointerId);pointerId=null;}
  function begin(){
-  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;bank=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?4+Math.floor(Math.random()*5):-1;updateShields();dodges=0;score=0;lastSecond=10;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;targetX=W/2;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
+  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;rareSeen='';flybyEffects=[];bank=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?4+Math.floor(Math.random()*5):-1;updateShields();dodges=0;score=0;lastSecond=10;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;targetX=W/2;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
   setOverlay(null);ui.hud.hidden=false;ui.pauseButton.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();sound('start');requestFrame();
  }
- function pause(){if(state!=='playing')return;state='paused';keys.clear();releasePointer();setOverlay('pauseScreen');ui.pauseButton.hidden=true;ui.nearToast.hidden=true;if(audio&&audio.state==='running')audio.suspend().catch(()=>{});$('resumeButton').focus({preventScroll:true});}
+ function pause(){if(state!=='playing')return;state='paused';keys.clear();releasePointer();setOverlay('pauseScreen');ui.pauseButton.hidden=true;ui.nearToast.hidden=true;ui.damageToast.hidden=true;if(audio&&audio.state==='running')audio.suspend().catch(()=>{});$('resumeButton').focus({preventScroll:true});}
  function resume(){if(state!=='paused')return;unlockAudio();state='playing';setOverlay(null);ui.pauseButton.hidden=false;lastFrame=performance.now();accumulator=0;arena.focus({preventScroll:true});requestFrame();}
  function emit(x,y,color,count=16){for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=35+Math.random()*180;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.35+Math.random()*.45,color,size:1+Math.random()*3});}if(particles.length>100)particles.splice(0,particles.length-100);}
+ function nextGoal(clear,perfect,previousBest){
+  if(!clear)return `あと${(Math.ceil((DURATION-elapsed)*10-1e-7)/10).toFixed(1)}秒でクリア。もう一度、飛ぼう。`;
+  if(!perfect)return '次はノーダメージでPERFECTへ。';
+  if(score<previousBest)return `自己ベストまで、あと${previousBest-score}点。`;
+  if(score===previousBest)return '自己ベストに並んだ！ 次はNEARをもう1回。';
+  return '自己ベスト更新！ 次はNEARをもう1回。';
+ }
  function finish(clear){
   if(state!=='playing')return;
   const perfect=clear&&hits===0, bonus=clear?(perfect?800:500):0;
-  state=clear?'clear':'over';keys.clear();releasePointer();pendingSpawns=[];nearToastTime=0;
+  const previousBest=best;
+  state=clear?'clear':'over';keys.clear();releasePointer();pendingSpawns=[];nearToastTime=0;damageToastTime=0;flybyEffects=[];
   if(clear){elapsed=DURATION;emit(W/2,H*.4,'#5affef',perfect?40:24);emit(W/2,H*.45,perfect?'#f8df8a':'#ff4c99',24);}
   else{shake=reduced?0:9;burstFlash=reduced?0:.16;emit(player.x,player.y,'#5affef',30);}
   score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50+bonus;sound(clear?(perfect?'perfect':'clear'):'hit');
@@ -151,13 +172,17 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   updateHUD();ui.pauseButton.hidden=true;ui.runHint.hidden=true;ui.runLabel.hidden=true;ui.resultScreen.classList.toggle('clear',clear);ui.resultScreen.classList.toggle('perfect',perfect);
   ui.resultTitle.innerHTML=perfect?'<span class="perfect-word">PERFECT</span><span>CLEAR</span>':clear?'<span>CLEAR</span>':'<span>GAME</span><span>OVER</span>';
   ui.resultEmblem.textContent=perfect?'✦':clear?'✓':'×';ui.resultEyebrow.textContent=perfect?'FLAWLESS FLIGHT.':clear?'A LITTLE SCARRED. STILL FLYING.':'SPARK WILL FLY AGAIN.';
-  ui.resultSubtitle.textContent=perfect?'ノーダメージ。完璧なフライト！':clear?'粘り勝ち！ 次はPERFECTを狙おう。':`あと${(Math.ceil((DURATION-elapsed)*10-1e-7)/10).toFixed(1)}秒。SPARKは、まだ飛べる。`;
+  ui.resultSubtitle.textContent=nextGoal(clear,perfect,previousBest);
+  ui.rareVisitor.hidden=!rareSeen;ui.rareVisitor.textContent=rareSeen?'今回の珍客：'+RARE_NAMES[rareSeen]:'';
   ui.resultScore.textContent=format(score);ui.survival.textContent=elapsed.toFixed(1)+'s';ui.dodged.textContent=String(dodges);ui.bonus.textContent='BONUS +'+bonus;ui.resultNear.textContent=String(nearCount);ui.resultHits.textContent=hits+' / 3';
   ui.resultBest.textContent=(newBest?'NEW BEST!  ':'PERSONAL BEST  ')+format(best);ui.startBest.textContent=format(best);setOverlay('resultScreen');$('againButton').focus({preventScroll:true});
  }
  function makeObstacle(lane,rare=false){
   const size=38+Math.random()*17,type=rare?RARE_TYPES[Math.floor(Math.random()*RARE_TYPES.length)]:NORMAL_TYPES[Math.floor(Math.random()*NORMAL_TYPES.length)];
-  return {x:40+lane*80,y:-50,w:size,h:size*.8,speed:285+elapsed*12,type,rare,passed:false,contacted:false,nearCandidate:false,nearBlocked:false,color:type==='crystal'?'#bf8bff':type==='drone'?'#ff79bb':rare?'#f8df8a':'#ff4c99'};
+  // A small spawn offset removes permanent safe corridors, while keeping straight falls.
+  const jitter=(Math.random()*2-1)*(elapsed<3?12:16);
+  const x=clamp(40+lane*80+jitter,size/2+8,W-size/2-8);
+  return {x,lane,y:-50,w:size,h:size*.8,speed:285+elapsed*12,type,rare,passed:false,contacted:false,nearCandidate:false,nearBlocked:false,closestGap:Infinity,nearPoint:null,color:type==='crystal'?'#bf8bff':type==='drone'?'#ff79bb':rare?'#f8df8a':'#ff4c99'};
  }
  function spawn(){
   // At most two separated lanes per wave. Rare visitors replace a normal hazard.
@@ -173,7 +198,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   // Contact is permanent for this obstacle, even during the immunity window.
   o.contacted=true;o.nearCandidate=false;
   if(invulnerable>0||state!=='playing')return false;
-  hits++;invulnerable=INVULNERABLE;shieldPulse=.42;shake=reduced?0:5;burstFlash=reduced?0:.07;updateShields();
+  hits++;damageToastTime=.55;nearToastTime=0;flybyEffects=[];invulnerable=INVULNERABLE;shieldPulse=.42;shake=reduced?0:5;burstFlash=reduced?0:.07;updateShields();
   for(const other of obstacles)other.nearCandidate=false;
   emit(player.x,player.y,hits===2?'#ff79bb':'#5affef',16);
   if(hits>=MAX_HITS){finish(false);return true;}
@@ -184,25 +209,31 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function step(dt){
   if(state!=='playing')return;
   const remain=DURATION-elapsed;dt=Math.min(dt,remain);
-  invulnerable=Math.max(0,invulnerable-dt);shieldPulse=Math.max(0,shieldPulse-dt);warningTime=Math.max(0,warningTime-dt);nearToastTime=Math.max(0,nearToastTime-dt);
+  invulnerable=Math.max(0,invulnerable-dt);shieldPulse=Math.max(0,shieldPulse-dt);warningTime=Math.max(0,warningTime-dt);nearToastTime=Math.max(0,nearToastTime-dt);damageToastTime=Math.max(0,damageToastTime-dt);
+  for(const effect of flybyEffects)effect.life-=dt;flybyEffects=flybyEffects.filter(effect=>effect.life>0);
   if(keys.has('ArrowLeft')||keys.has('a'))targetX-=420*dt;if(keys.has('ArrowRight')||keys.has('d'))targetX+=420*dt;targetX=clamp(targetX,26,W-26);
   const oldX=player.x;player.x+=clamp(targetX-player.x,-1200*dt,1200*dt);
   const desiredBank=reduced?0:clamp((player.x-oldX)/Math.max(dt,.0001)/900,-.22,.22);bank+=(desiredBank-bank)*(1-Math.exp(-14*dt));
   elapsed=Math.min(DURATION,elapsed+dt);
   for(const p of pendingSpawns){p.delay-=dt;if(p.delay<=0)obstacles.push(p.obstacle);}pendingSpawns=pendingSpawns.filter(p=>p.delay>0);
   spawnClock-=dt;if(spawnClock<=0&&elapsed<8.2)spawnClock+=spawn();
-  let nearAwards=0,normalAwards=0;
+  let nearAwards=0,normalAwards=0,nearXTotal=0;
   // Resolve all contacts first: never award a near miss during a damage event.
-  for(const o of obstacles){o.y+=o.speed*dt;if(!o.contacted&&collides(player,o)){takeHit(o);if(state!=='playing')return;}}
+  for(const o of obstacles){o.y+=o.speed*dt;if(o.rare&&o.y+o.h/2>=0&&o.y-o.h/2<H)rareSeen=o.type;if(!o.contacted&&collides(player,o)){takeHit(o);if(state!=='playing')return;}}
   for(const o of obstacles){
    const gap=obstacleGap(player,o);
-   if(!o.contacted&&!o.passed&&gap>=0&&gap<NEAR_MARGIN){if(invulnerable>0){o.nearBlocked=true;o.nearCandidate=false;}else if(!o.nearBlocked)o.nearCandidate=true;}
+   if(!o.contacted&&!o.passed&&gap>=0&&gap<NEAR_MARGIN){if(invulnerable>0){o.nearBlocked=true;o.nearCandidate=false;}else if(!o.nearBlocked){
+    o.nearCandidate=true;
+    if(gap<(o.closestGap??Infinity)){o.closestGap=gap;o.nearPoint={x1:player.x,y1:player.y,x2:clamp(player.x,o.x-o.w/2,o.x+o.w/2),y2:clamp(player.y,o.y-o.h/2,o.y+o.h/2)};}
+   }}
    if(!o.passed&&o.y-o.h/2>player.y+player.r+NEAR_MARGIN){
     o.passed=true;
-    if(!o.contacted){dodges++;if(o.nearCandidate&&!o.nearBlocked&&invulnerable<=0){nearCount++;nearAwards++;}else normalAwards++;}
+    if(!o.contacted){dodges++;if(o.nearCandidate&&!o.nearBlocked&&invulnerable<=0){nearCount++;nearAwards++;
+      const point=o.nearPoint||{x1:player.x,y1:player.y,x2:o.x,y2:player.y};nearXTotal+=(point.x1+point.x2)/2;
+      flybyEffects.push({...point,life:.32});if(flybyEffects.length>6)flybyEffects.shift();}else normalAwards++;}
    }
   }
-  if(nearAwards){nearToastPoints=nearToastTime>.35?nearToastPoints+nearAwards*50:nearAwards*50;nearToastTime=.7;ui.nearToast.textContent='NEAR! +'+nearToastPoints;sound('near');emit(player.x,player.y-25,'#5affef',5);}
+  if(nearAwards){nearToastPoints=nearToastTime>.35?nearToastPoints+nearAwards*50:nearAwards*50;nearToastTime=.7;nearAnchorX=nearXTotal/nearAwards;ui.nearToast.textContent='NEAR! +'+nearToastPoints;sound('near');emit(player.x,player.y-25,'#5affef',5);}
   else if(normalAwards)sound('dodge');
   obstacles=obstacles.filter(o=>o.y-o.h/2<H+30);score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50;
   const seconds=Math.ceil(DURATION-elapsed);if(seconds<lastSecond){lastSecond=seconds;if(seconds>0&&seconds<=3)sound('tick');}ui.runHint.hidden=elapsed>2.5;
@@ -257,9 +288,19 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   }
   ctx.restore();
  }
+ function drawFlybys(){
+  for(const effect of flybyEffects){
+   ctx.save();const alpha=clamp(effect.life/.32,0,1);ctx.globalAlpha=alpha;ctx.strokeStyle='#b8fff2';ctx.lineWidth=1.5;ctx.shadowColor='#5affef';ctx.shadowBlur=reduced?0:9;
+   const x=(effect.x1+effect.x2)/2,y=(effect.y1+effect.y2)/2;
+   // A brief vertical glint marks the actual close pass, behind the input-free label.
+   ctx.beginPath();ctx.moveTo(x,y-17);ctx.lineTo(x-2,y);ctx.lineTo(x,y+17);ctx.stroke();
+   ctx.beginPath();ctx.moveTo(x-5,y);ctx.lineTo(x+5,y);ctx.stroke();ctx.restore();
+  }
+ }
  function draw(dt){
   ctx.setTransform(scaleX,0,0,scaleY,0,0);ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake=Math.max(0,shake-dt*35);}drawBackground(sceneryTime);
   if(state==='ready'){[{x:35,y:160,w:32,h:28,color:'#ff4c99'},{x:362,y:355,w:28,h:24,color:'#bf8bff'}].forEach(drawObstacle);}else{obstacles.forEach(drawObstacle);if(state!=='over')drawShip(player.x,player.y,sceneryTime);}
+  drawFlybys();
   for(const p of particles){if(state!=='paused'){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;}ctx.globalAlpha=clamp(p.life*2,0,1);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}particles=particles.filter(p=>p.life>0);ctx.globalAlpha=1;if(burstFlash>0){ctx.fillStyle=`rgba(255,76,153,${burstFlash})`;ctx.fillRect(0,0,W,H);burstFlash=Math.max(0,burstFlash-dt);}ctx.restore();
  }
  function requestFrame(){if(!frameRequested){frameRequested=true;requestAnimationFrame(frame);}}
