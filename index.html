@@ -97,7 +97,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <div class="result-best" id="resultBest">30s BEST 0000</div>
   </section>
  </section>
- <footer class="footer"><span class="edition">V4 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
+ <footer class="footer"><span class="edition">V4.1 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
 </main>
 <script>
 (() => {
@@ -124,9 +124,18 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  const format = n => String(n).padStart(4,'0');
  ui.startBest.textContent=format(best);
  function updateSoundUI(){ui.soundButton.setAttribute('aria-pressed',String(muted));ui.soundButton.setAttribute('aria-label',muted?'効果音をオンにする':'効果音をオフにする');ui.soundWaves.style.display=muted?'none':'';ui.soundSlash.style.display=muted?'':'none';ui.soundSlash.removeAttribute('hidden');if(audioMaster)audioMaster.gain.value=muted?0:.16;}
- function unlockAudio(){
+ function unlockAudio(onReady){
   if(muted)return;
-  try { const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return; if(!audio){audio=new AC();audioMaster=audio.createGain();audioMaster.gain.value=.16;audioMaster.connect(audio.destination);} if(audio.state==='suspended')audio.resume().catch(()=>{}); } catch (_) {}
+  try {
+   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+   if(!audio||audio.state==='closed'){
+    audio=new AC();audioMaster=audio.createGain();audioMaster.gain.value=.16;audioMaster.connect(audio.destination);
+   }
+   const current=audio;
+   const ready=()=>{if(!muted&&audio===current&&current.state==='running'&&!document.hidden&&onReady)onReady();};
+   if(current.state==='running')ready();
+   else if(current.state==='suspended'||current.state==='interrupted')current.resume().then(ready).catch(()=>{});
+  }catch(_){}
  }
  function tone(freq,duration=.08,type='sine',delay=0,slide=0){
   if(muted||!audio||audio.state!=='running')return;
@@ -164,8 +173,8 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function setOverlay(which){for(const key of ['startScreen','resultScreen'])ui[key].hidden=key!==which;}
  function releasePointer(){if(pointerId!==null&&arena.hasPointerCapture(pointerId))arena.releasePointerCapture(pointerId);pointerId=null;}
  function begin(){
-  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;lives=3;itemPoints=0;itemCount=0;barrier=0;barrierWarned=false;itemToastTime=0;items=[];itemRetry=0;itemSchedule=[{at:4+Math.random(),kind:'star'},{at:13+Math.random()*2,kind:'support'}];if(Math.random()<.55)itemSchedule.push({at:22+Math.random(),kind:'support'});invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;nearAnchorY=H-174;rareSeen='';flybyEffects=[];bank=0;thrust=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?5+Math.floor(Math.random()*15):-1;updateShields();dodges=0;score=0;lastSecond=DURATION;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;player.y=H-112;targetX=player.x;targetY=player.y;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
-  setOverlay(null);ui.hud.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();sound('start');requestFrame();
+  state='playing';elapsed=0;spawnClock=.3;hits=0;lives=3;itemPoints=0;itemCount=0;barrier=0;barrierWarned=false;itemToastTime=0;items=[];itemRetry=0;itemSchedule=[{at:4+Math.random(),kind:'star'},{at:13+Math.random()*2,kind:'support'}];if(Math.random()<.55)itemSchedule.push({at:22+Math.random(),kind:'support'});invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;nearAnchorY=H-174;rareSeen='';flybyEffects=[];bank=0;thrust=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?5+Math.floor(Math.random()*15):-1;updateShields();dodges=0;score=0;lastSecond=DURATION;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;player.y=H-112;targetX=player.x;targetY=player.y;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
+  setOverlay(null);ui.hud.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();unlockAudio(()=>{if(state==='playing'&&elapsed<1)sound('start');});requestFrame();
  }
  function resetInput(){keys.clear();releasePointer();targetX=player.x;targetY=player.y;}
  function visibilityChanged(){
@@ -420,7 +429,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  window.addEventListener('blur',resetInput);
  window.addEventListener('pageshow',()=>{lastFrame=performance.now();accumulator=0;requestFrame();});
  $('playButton').addEventListener('click',begin);$('againButton').addEventListener('click',begin);
- ui.soundButton.addEventListener('click',()=>{muted=!muted;updateSoundUI();try{localStorage.setItem('neon-dodge-muted-v1',muted?'1':'0');}catch(_){}if(!muted){unlockAudio();tone(660,.08,'triangle');}});
+ ui.soundButton.addEventListener('click',()=>{muted=!muted;updateSoundUI();try{localStorage.setItem('neon-dodge-muted-v1',muted?'1':'0');}catch(_){}if(!muted)unlockAudio(()=>tone(660,.08,'triangle'));});
  updateSoundUI();updateShields();requestFrame();
 })();
 </script>
