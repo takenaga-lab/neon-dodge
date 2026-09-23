@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080a19">
-<meta name="description" content="たった10秒、ネオンを駆け抜けろ。スライドして障害物を避ける、スマホで遊べるミニゲーム。">
-<title>NEON DODGE — 10秒、限界のその先へ。</title>
+<meta name="description" content="30秒、自由にネオンを駆け抜けろ。上下左右にスライドして避ける、スマホで遊べるミニゲーム。">
+<title>NEON DODGE — 30秒、自由に駆け抜けろ。</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080a19'/%3E%3Cpath d='M32 9 51 49 32 40 13 49Z' fill='%235affef'/%3E%3C/svg%3E">
 <style>
 :root{color-scheme:dark;--bg:#080a19;--cyan:#5affef;--pink:#ff4c99;--muted:#8f96b5;--line:rgba(144,157,208,.17)}
@@ -25,12 +25,12 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
 .play-button{border:0;position:relative;display:flex;align-items:center;justify-content:center;gap:17px;width:100%;max-width:326px;min-height:62px;border-radius:15px;background:linear-gradient(110deg,#89fff0,#42e9e4);color:#07323b;font-size:20px;font-weight:900;letter-spacing:3px;box-shadow:0 6px 0 #14777c,0 10px 35px #5affef1c;transition:transform .12s,box-shadow .12s}.play-button:hover{filter:brightness(1.08)}.play-button:active{transform:translateY(4px);box-shadow:0 2px 0 #14777c,0 5px 20px #5affef22}.play-button .arrow{font-size:17px}
 .instructions{font-size:12px;line-height:1.9;color:#b9bfd7;margin:22px 0 0}.instructions .gesture{color:var(--cyan);font-size:18px;vertical-align:-1px;margin-right:8px}.keyboard-hint{display:block;color:#707997;font-size:10px;letter-spacing:.5px}.best-line{display:flex;align-items:center;gap:8px;color:#7e88a8;font-size:9px;font-weight:700;letter-spacing:1.8px;margin-top:23px}.best-line strong{color:#c4cbe1;font-size:11px;font-variant-numeric:tabular-nums}
 .footer{height:43px;padding:0 24px max(0px,env(safe-area-inset-bottom));flex:none;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);font-size:8px;letter-spacing:2px;color:#6b7596}.footer .edition{color:#acb4ce}.run-hint{position:absolute;bottom:28px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:2px;color:#7ea1b4;pointer-events:none}.run-hint b{color:var(--cyan);font-weight:400;margin:0 12px}.run-label{position:absolute;top:111px;left:0;right:0;text-align:center;color:#8e97b9;font-size:9px;letter-spacing:3px;pointer-events:none}
-.result-overlay{background:#080a19ce;backdrop-filter:blur(5px)}.result-emblem{display:grid;place-items:center;width:68px;height:68px;border:1px solid #ff4c9955;border-radius:22px;background:#ff4c9912;color:var(--pink);font-size:32px;margin-bottom:26px;transform:rotate(-8deg);box-shadow:0 0 45px #ff4c9912}.result-title{font-family:"Arial Black",Arial,sans-serif;line-height:.92;font-size:clamp(48px,14vw,67px);font-style:italic;font-weight:900;letter-spacing:-3px;margin:17px 0;color:var(--pink);text-shadow:0 0 30px #ff4c9922;transform:rotate(-4deg)}.result-title span{display:block}.result-subtitle{font-size:12px;color:#aab2ce;margin:5px 0 25px}.score-card{width:100%;max-width:326px;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(130deg,#ffffff07,#ffffff02);margin-bottom:27px}.score-card .total{font-size:51px;font-weight:900;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin:4px 0 14px}.score-details{border-top:1px solid var(--line);padding-top:13px;display:flex;justify-content:space-between;font-size:10px;color:#8f99b7}.score-details strong{color:#e0e6f7;margin-left:4px}.clear .result-title,.clear .result-emblem{color:var(--cyan)}.clear .result-emblem{background:#5affef12;border-color:#5affef55;box-shadow:0 0 50px #5affef19}.result-best{font-size:10px;color:#9ba6c6;letter-spacing:1px;margin-top:24px}.pause-title{font-size:44px;font-style:italic;margin:20px 0;letter-spacing:-2px}.pause-text{font-size:12px;color:#a6afcc;line-height:2;margin:0 0 28px}.secondary-button{border:0;background:none;color:#a5afcc;font-size:11px;letter-spacing:2px;padding:22px 30px;margin-top:8px}
+.result-overlay{background:#080a19ce;backdrop-filter:blur(5px)}.result-emblem{display:grid;place-items:center;width:68px;height:68px;border:1px solid #ff4c9955;border-radius:22px;background:#ff4c9912;color:var(--pink);font-size:32px;margin-bottom:26px;transform:rotate(-8deg);box-shadow:0 0 45px #ff4c9912}.result-title{font-family:"Arial Black",Arial,sans-serif;line-height:.92;font-size:clamp(48px,14vw,67px);font-style:italic;font-weight:900;letter-spacing:-3px;margin:17px 0;color:var(--pink);text-shadow:0 0 30px #ff4c9922;transform:rotate(-4deg)}.result-title span{display:block}.result-subtitle{font-size:12px;color:#aab2ce;margin:5px 0 25px}.score-card{width:100%;max-width:326px;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(130deg,#ffffff07,#ffffff02);margin-bottom:27px}.score-card .total{font-size:51px;font-weight:900;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin:4px 0 14px}.score-details{border-top:1px solid var(--line);padding-top:13px;display:flex;justify-content:space-between;font-size:10px;color:#8f99b7}.score-details strong{color:#e0e6f7;margin-left:4px}.clear .result-title,.clear .result-emblem{color:var(--cyan)}.clear .result-emblem{background:#5affef12;border-color:#5affef55;box-shadow:0 0 50px #5affef19}.result-best{font-size:10px;color:#9ba6c6;letter-spacing:1px;margin-top:24px}
 @keyframes hover{50%{transform:translateY(-6px)}}
 @media(min-width:600px){body{display:grid;place-items:center;background:radial-gradient(ellipse at 15% 10%,#24244855,transparent 50%),radial-gradient(ellipse at 90% 90%,#39142b55,transparent 55%),#050610}.shell{height:calc(100dvh - 40px);width:440px;max-height:880px;border:1px solid #34364f;border-radius:26px;box-shadow:0 30px 100px #0009}}
 @media(max-height:740px){.topbar{height:58px}.footer{height:32px}.overlay{padding-top:15px;padding-bottom:15px}h1{font-size:70px;margin:21px 0 16px}.hero-art{height:101px;margin:0}.mission{margin-bottom:11px}.play-button{min-height:56px}.instructions{margin-top:15px}.best-line{margin-top:14px}.result-emblem{width:48px;height:48px;font-size:25px;margin-bottom:10px}.result-title{font-size:55px;margin:10px 0}.result-subtitle{margin-bottom:16px}.score-card{padding:14px 20px;margin-bottom:19px}.score-card .total{font-size:42px}.result-best{margin-top:20px}}
 @media(max-height:590px){.topbar{height:48px}.footer{height:26px}.hero-art{display:none}h1{font-size:59px;margin:16px 0}.tagline{font-size:11px;margin-bottom:17px}.best-line{margin-top:11px}.keyboard-hint{display:none}.result-emblem{display:none}.result-title{font-size:43px}.score-card{padding:10px 18px;margin-bottom:12px}.score-card .total{font-size:34px;margin:1px 0 7px}.result-subtitle{margin-bottom:12px}.result-best{margin-top:14px}.hud{top:15px}.run-label{top:89px}}
-@media(max-height:430px) and (orientation:landscape){.shell{width:100%;max-width:780px;height:100dvh;border:0;border-radius:0}.overlay{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;align-content:center;padding:14px 30px}.overlay>*{margin:0!important}.overlay h1{grid-row:1/5;grid-column:1;font-size:70px}.overlay .eyebrow{grid-column:2}.overlay .tagline{display:none}.overlay .mission,.overlay .play-button,.overlay .instructions,.overlay .best-line{grid-column:2}.overlay .best-line{justify-content:center}.result-title{grid-row:1/4;grid-column:1}.result-overlay .score-card{grid-column:2;grid-row:2/5}.result-overlay .play-button{grid-column:2}.result-overlay .result-best,.result-overlay .result-subtitle{grid-column:1}.pause-title{grid-column:1;grid-row:1/3}.pause-text{grid-column:1}.secondary-button{grid-column:2}.footer{height:24px}}
+@media(max-height:430px) and (orientation:landscape){.shell{width:100%;max-width:780px;height:100dvh;border:0;border-radius:0}.overlay{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;align-content:center;padding:14px 30px}.overlay>*{margin:0!important}.overlay h1{grid-row:1/5;grid-column:1;font-size:70px}.overlay .eyebrow{grid-column:2}.overlay .tagline{display:none}.overlay .mission,.overlay .play-button,.overlay .instructions,.overlay .best-line{grid-column:2}.overlay .best-line{justify-content:center}.result-title{grid-row:1/4;grid-column:1}.result-overlay .score-card{grid-column:2;grid-row:2/5}.result-overlay .play-button{grid-column:2}.result-overlay .result-best,.result-overlay .result-subtitle{grid-column:1}.footer{height:24px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 /* V2: compact shield HUD and feedback, within the original layout. */
 .shield-metric{text-align:center}.shield-dots{display:flex;gap:6px;justify-content:center;margin-top:9px;color:var(--cyan);font-size:19px;line-height:1;text-shadow:0 0 12px #5affef55}.shield-dots .empty{color:#525a77;text-shadow:none}.shield-metric.critical .shield-dots{color:var(--pink)}
@@ -48,30 +48,36 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
 .rare-visitor{font-size:10px;color:#f8df8a;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);letter-spacing:.4px}
 @media(max-height:740px){.rare-visitor{margin-top:6px;padding-top:6px}}
 @media(max-height:590px){.rare-visitor{margin-top:4px;padding-top:4px}.result-subtitle{font-size:11px}}
+/* V3: readable life count; hearts briefly break on damage. */
+.shield-metric .metric-label{letter-spacing:1px;color:#c3cbe3}.shield-metric .metric-label span{color:#f4f5ff;font-size:12px;font-variant-numeric:tabular-nums;margin-left:3px}
+.shield-dots{font-family:Arial,sans-serif;gap:5px;margin-top:6px;font-size:24px;color:#ff80b6;text-shadow:0 0 12px #ff4c9955}.shield-dots .empty{color:#454a63;transform:scale(.82);text-shadow:none;animation:heart-break .4s ease-out}.shield-metric.critical .shield-dots{color:#ff619f}
+@keyframes heart-break{0%{color:#fff;transform:scale(1.3)}45%{color:#ff80b6;transform:translateY(-3px) rotate(-15deg)}100%{color:#454a63;transform:scale(.82)}}
+.run-label{letter-spacing:1px;font-size:10px}.run-hint{letter-spacing:1px}
+@media(max-width:350px){.shield-dots{font-size:21px;gap:3px}.hud{left:16px;right:16px}.metric-label{letter-spacing:1.4px}}
+@media(prefers-reduced-motion:reduce){.shield-dots .empty{animation:none}}
 </style>
 </head>
 <body>
 <main class="shell">
  <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">ϟ</span> NEON ARCADE</div><div class="top-actions">
-  <button class="icon-button" id="pauseButton" aria-label="一時停止" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg></button>
   <button class="icon-button" id="soundButton" aria-label="効果音をオフにする" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4 6 8H3v8h3l5 4Z"/><path id="soundWaves" d="M15 8q4 4 0 8M18 5q7 7 0 14"/><path id="soundSlash" d="m16 9 6 6m0-6-6 6" hidden/></svg></button>
  </div></header>
- <section class="arena" id="arena" tabindex="0" aria-label="ゲーム操作エリア。左右にスライド、マウス、または左右キーで移動。Escapeキーで一時停止。">
+ <section class="arena" id="arena" tabindex="0" aria-label="ゲーム操作エリア。上下左右にスライド、マウス、または方向キーで移動。30秒生き残ればクリア。">
   <canvas id="canvas" aria-hidden="true"></canvas>
-  <div class="hud" id="hud" hidden><div class="timer-track"><div class="timer-fill" id="timerFill"></div></div><div><div class="metric-label">SCORE</div><div class="metric-value" id="score">0000</div></div><div class="shield-metric" id="shieldMetric"><div class="metric-label">SHIELD</div><div class="shield-dots" id="shieldDots" role="status" aria-label="シールド 残り3"><span id="shield1" aria-hidden="true">◆</span><span id="shield2" aria-hidden="true">◆</span><span id="shield3" aria-hidden="true">◆</span></div></div><div class="time-metric" id="timeMetric"><div class="metric-label">TIME LEFT</div><div class="metric-value"><span id="time">10.0</span><span class="unit">s</span></div></div></div>
+  <div class="hud" id="hud" hidden><div class="timer-track"><div class="timer-fill" id="timerFill"></div></div><div><div class="metric-label">SCORE</div><div class="metric-value" id="score">0000</div></div><div class="shield-metric" id="shieldMetric"><div class="metric-label">ライフ <span id="lifeCount">3/3</span></div><div class="shield-dots" id="shieldDots" role="status" aria-label="ライフ 残り3"><span id="shield1" aria-hidden="true">♥</span><span id="shield2" aria-hidden="true">♥</span><span id="shield3" aria-hidden="true">♥</span></div></div><div class="time-metric" id="timeMetric"><div class="metric-label">TIME LEFT</div><div class="metric-value"><span id="time">30.0</span><span class="unit">s</span></div></div></div>
   <div class="run-label" id="runLabel" hidden>SURVIVE THE NEON</div>
   <div class="near-toast" id="nearToast" hidden>NEAR! +50</div>
-  <div class="damage-toast" id="damageToast" hidden>SHIELD −1</div>
-  <div class="run-hint" id="runHint" hidden>〈 <b>SLIDE TO DODGE</b> 〉</div>
+  <div class="damage-toast" id="damageToast" hidden>ライフ −1</div>
+  <div class="run-hint" id="runHint" hidden>〈 <b>上下左右にスライド</b> 〉</div>
   <section class="overlay" id="startScreen" aria-labelledby="gameTitle">
-   <div class="eyebrow"><span class="live-dot"></span> THE 10-SECOND CHALLENGE</div>
+   <div class="eyebrow"><span class="live-dot"></span> THE 30-SECOND FLIGHT</div>
    <h1 id="gameTitle"><span class="neon-word">NEON</span><span class="dodge-word">DODGE</span></h1>
-   <p class="tagline">10秒、限界のその先へ。</p>
+   <p class="tagline">30秒、自由に駆け抜けろ。</p>
    <div class="hero-art" aria-hidden="true"><svg viewBox="0 0 220 137"><defs><linearGradient id="trail" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5affef" stop-opacity=".4"/><stop offset="1" stop-color="#5affef" stop-opacity="0"/></linearGradient></defs><ellipse cx="110" cy="106" rx="82" ry="19" fill="none" stroke="#5affef" opacity=".12"/><ellipse cx="110" cy="106" rx="54" ry="12" fill="none" stroke="#5affef" opacity=".17"/><path d="M32 17v30M189 36v21M60 68v14M167 82v24" stroke="#868eff" opacity=".3"/><g class="hero-rock"><path d="m41 30 24 6-6 24-24-6Z" fill="#ff4c9918" stroke="#ff4c99"/><path d="m161 12 19 5-5 19-19-5Z" fill="#ff4c9918" stroke="#ff4c99"/></g><g class="hero-ship"><g transform="translate(110 67) scale(1.27)"><path d="M-14 15h9l-4 33ZM5 15h9l-5 33Z" fill="url(#trail)"/><path d="M-8-9-24 7-24 15-9 10 0 14 9 10 24 15 24 7 8-9Z" fill="#c9e5f5" stroke="#5affef" stroke-width=".8"/><path d="M-17 8-13 4-9 10-9 24-17 19ZM17 8 13 4 9 10 9 24 17 19Z" fill="#243c60" stroke="#5affef" stroke-width=".8"/><path d="M0-29 7-18 10 7 6 17-6 17-10 7-7-18Z" fill="#f0faff"/><path d="M0-23 4-14 5 2 0 7-5 2-4-14Z" fill="#132b47"/><path d="M0-18 3-12 3-2 0 1-3-2-3-12Z" fill="#5affef"/><path d="M-24 7v7M24 7v7" stroke="#5affef" stroke-width="3"/><path d="M-16 17h6M10 17h6" stroke="#ff77b4" stroke-width="2"/><path d="M-12 20v6M12 20v6" stroke="#a5fff5" stroke-width="2"/></g></g><text x="110" y="135" fill="#90a7bc" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" letter-spacing="2">N-01 SPARK</text></svg></div>
-   <div class="mission">3 SHIELDS. 10 SECONDS.</div>
+   <div class="mission">3 LIVES. 30 SECONDS.</div>
    <button class="play-button" id="playButton">PLAY <span class="arrow" aria-hidden="true">▶</span></button>
-   <p class="instructions"><span class="gesture" aria-hidden="true">↔</span>左右にスライドして障害物を避ける<span class="keyboard-hint">PC：マウス / ← → キー</span></p>
-   <div class="best-line">PERSONAL BEST <strong id="startBest">0000</strong></div>
+   <p class="instructions"><span class="gesture" aria-hidden="true">✥</span>上下左右にスライドして避ける<span class="keyboard-hint">PC：マウス / ↑ ↓ ← → キー</span></p>
+   <div class="best-line">30s BEST <strong id="startBest">0000</strong></div>
   </section>
   <section class="overlay result-overlay" id="resultScreen" aria-labelledby="resultTitle" hidden>
    <div class="result-emblem" id="resultEmblem" aria-hidden="true">×</div>
@@ -80,21 +86,18 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <p class="result-subtitle" id="resultSubtitle">あと少し。もう一度、飛び込もう。</p>
    <div class="score-card"><div class="metric-label">YOUR SCORE</div><div class="total" id="resultScore">0000</div><div class="score-details"><span>生存 <strong id="survival">0.0s</strong></span><span>回避 <strong id="dodged">0</strong></span><span id="bonus">BONUS +0</span></div><div class="result-extra"><span>NEAR <strong id="resultNear">0</strong></span><span>被弾 <strong id="resultHits">0 / 3</strong></span></div><div class="rare-visitor" id="rareVisitor" hidden></div></div>
    <button class="play-button" id="againButton">PLAY AGAIN <span class="arrow" aria-hidden="true">↗</span></button>
-   <div class="result-best" id="resultBest">PERSONAL BEST 0000</div>
-  </section>
-  <section class="overlay result-overlay" id="pauseScreen" aria-labelledby="pauseTitle" hidden>
-   <div class="eyebrow">TAKE A BREATH</div><h2 class="pause-title" id="pauseTitle">PAUSED</h2><p class="pause-text">準備ができたら、続きをどうぞ。<br>残り時間は止まっています。</p><button class="play-button" id="resumeButton">RESUME <span class="arrow" aria-hidden="true">▶</span></button><button class="secondary-button" id="restartButton">RESTART</button>
+   <div class="result-best" id="resultBest">30s BEST 0000</div>
   </section>
  </section>
- <footer class="footer"><span class="edition">V2.1 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
+ <footer class="footer"><span class="edition">V3 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
 </main>
 <script>
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
  const arena = $('arena'), canvas = $('canvas'), ctx = canvas.getContext('2d');
- const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','pauseScreen','pauseButton','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits','damageToast','rareVisitor'].map(id=>[id,$(id)]));
- const W = 400, H = 680, DURATION = 10, STEP = 1 / 120;
+ const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits','damageToast','rareVisitor','lifeCount'].map(id=>[id,$(id)]));
+ const W = 400, H = 680, DURATION = 30, STEP = 1 / 120;
  const MAX_HITS=3, INVULNERABLE=.75, NEAR_MARGIN=12;
  const RARE_NAMES={banana:'バナナ',donut:'ドーナツ',alien:'エイリアン'};
  const NORMAL_TYPES=['block','meteor','crystal','drone'], RARE_TYPES=['banana','donut','alien'];
@@ -102,13 +105,13 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
  let state='ready', elapsed=0, spawnClock=0, dodges=0, score=0, best=0, muted=false;
  let hits=0, invulnerable=0, shieldPulse=0, warningTime=0, nearCount=0, nearToastTime=0, nearToastPoints=0;
- let damageToastTime=0, nearAnchorX=W/2, rareSeen='', flybyEffects=[];
- let waveIndex=0, rareWave=-1, rareSpawned=false, pendingSpawns=[], bank=0;
- let player={x:W/2,y:H-112,r:9}, targetX=W/2, obstacles=[], particles=[], keys=new Set();
- let lastFrame=0, accumulator=0, sceneryTime=0, shake=0, burstFlash=0, lastSecond=10;
- let pointerId=null, pointerX=0, dragStartX=0, audio=null, audioMaster=null, frameRequested=false;
+ let damageToastTime=0, nearAnchorX=W/2, nearAnchorY=H-174, rareSeen='', flybyEffects=[];
+ let waveIndex=0, rareWave=-1, rareSpawned=false, pendingSpawns=[], bank=0, thrust=0;
+ let player={x:W/2,y:H-112,r:9}, targetX=W/2, targetY=H-112, obstacles=[], particles=[], keys=new Set();
+ let lastFrame=0, accumulator=0, sceneryTime=0, shake=0, burstFlash=0, lastSecond=DURATION;
+ let pointerId=null, pointerX=0, pointerY=0, dragStartX=0, dragStartY=0, audio=null, audioMaster=null, frameRequested=false;
  let drawWidth=400,drawHeight=680,scaleX=1,scaleY=1;
- try { best=Math.max(0,Number(localStorage.getItem('neon-dodge-best-v1'))||0); muted=localStorage.getItem('neon-dodge-muted-v1')==='1'; } catch (_) {}
+ try { best=Math.max(0,Number(localStorage.getItem('neon-dodge-best-v3-30s'))||0); muted=localStorage.getItem('neon-dodge-muted-v1')==='1'; } catch (_) {}
  const format = n => String(n).padStart(4,'0');
  ui.startBest.textContent=format(best);
  function updateSoundUI(){ui.soundButton.setAttribute('aria-pressed',String(muted));ui.soundButton.setAttribute('aria-label',muted?'効果音をオンにする':'効果音をオフにする');ui.soundWaves.style.display=muted?'none':'';ui.soundSlash.style.display=muted?'':'none';ui.soundSlash.removeAttribute('hidden');if(audioMaster)audioMaster.gain.value=muted?0:.16;}
@@ -133,25 +136,29 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  new ResizeObserver(resize).observe(arena); resize();
  function updateShields(){
   const remaining=MAX_HITS-hits;
-  for(let i=1;i<=MAX_HITS;i++){const empty=i>remaining;ui['shield'+i].textContent=empty?'◇':'◆';ui['shield'+i].classList.toggle('empty',empty);}
-  ui.shieldDots.setAttribute('aria-label',`シールド 残り${remaining}`);ui.shieldMetric.classList.toggle('critical',remaining===1);
+  for(let i=1;i<=MAX_HITS;i++){const empty=i>remaining;ui['shield'+i].textContent='♥';ui['shield'+i].classList.toggle('empty',empty);}
+  ui.lifeCount.textContent=remaining+'/3';ui.shieldDots.setAttribute('aria-label',`ライフ 残り${remaining}`);ui.shieldMetric.classList.toggle('critical',remaining===1);
  }
  function updateHUD(){
-  ui.score.textContent=format(score);ui.time.textContent=(Math.ceil(Math.max(0,DURATION-elapsed)*10-1e-7)/10).toFixed(1);ui.timerFill.style.transform=`scaleX(${Math.max(0,1-elapsed/DURATION)})`;ui.timeMetric.classList.toggle('urgent',elapsed>=7);
-  ui.runLabel.classList.toggle('critical',hits===2);ui.runLabel.classList.toggle('final-stretch',elapsed>=7&&hits<2);
-  ui.runLabel.textContent=warningTime>0?'CRITICAL — LAST SHIELD':hits===2?'LAST SHIELD — KEEP GOING':elapsed>=7?'FINAL 3 SECONDS — HOLD ON':'N-01 SPARK / SHIELDS ONLINE';
+  ui.score.textContent=format(score);ui.time.textContent=(Math.ceil(Math.max(0,DURATION-elapsed)*10-1e-7)/10).toFixed(1);ui.timerFill.style.transform=`scaleX(${Math.max(0,1-elapsed/DURATION)})`;ui.timeMetric.classList.toggle('urgent',elapsed>=DURATION-5);
+  ui.runLabel.classList.toggle('critical',hits===2);ui.runLabel.classList.toggle('final-stretch',elapsed>=DURATION-5&&hits<2);
+  ui.runLabel.textContent=hits===2?'あと1回で終了 — 落ち着いて避けよう':elapsed>=DURATION-5?'あと5秒、駆け抜けろ！':elapsed<5?'30秒、生き残ろう':'N-01 SPARK / FREE FLIGHT';
   ui.nearToast.hidden=nearToastTime<=0||state!=='playing';
-  ui.nearToast.style.left=(clamp(nearAnchorX,70,W-70)/W*100)+'%';ui.nearToast.style.top=((player.y-62)/H*100)+'%';
-  ui.damageToast.hidden=damageToastTime<=0||state!=='playing';ui.damageToast.style.left=(clamp(player.x,65,W-65)/W*100)+'%';ui.damageToast.style.top=((player.y-62)/H*100)+'%';
+  ui.nearToast.style.left=(clamp(nearAnchorX,70,W-70)/W*100)+'%';ui.nearToast.style.top=(clamp(nearAnchorY-40,135,H-70)/H*100)+'%';
+  ui.damageToast.hidden=damageToastTime<=0||state!=='playing';ui.damageToast.style.left=(clamp(player.x,65,W-65)/W*100)+'%';ui.damageToast.style.top=(clamp(player.y-62,135,H-70)/H*100)+'%';
  }
- function setOverlay(which){for(const key of ['startScreen','resultScreen','pauseScreen'])ui[key].hidden=key!==which;}
+ function setOverlay(which){for(const key of ['startScreen','resultScreen'])ui[key].hidden=key!==which;}
  function releasePointer(){if(pointerId!==null&&arena.hasPointerCapture(pointerId))arena.releasePointerCapture(pointerId);pointerId=null;}
  function begin(){
-  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;rareSeen='';flybyEffects=[];bank=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?4+Math.floor(Math.random()*5):-1;updateShields();dodges=0;score=0;lastSecond=10;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;targetX=W/2;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
-  setOverlay(null);ui.hud.hidden=false;ui.pauseButton.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();sound('start');requestFrame();
+  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;nearAnchorY=H-174;rareSeen='';flybyEffects=[];bank=0;thrust=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?5+Math.floor(Math.random()*15):-1;updateShields();dodges=0;score=0;lastSecond=DURATION;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;player.y=H-112;targetX=player.x;targetY=player.y;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
+  setOverlay(null);ui.hud.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();sound('start');requestFrame();
  }
- function pause(){if(state!=='playing')return;state='paused';keys.clear();releasePointer();setOverlay('pauseScreen');ui.pauseButton.hidden=true;ui.nearToast.hidden=true;ui.damageToast.hidden=true;if(audio&&audio.state==='running')audio.suspend().catch(()=>{});$('resumeButton').focus({preventScroll:true});}
- function resume(){if(state!=='paused')return;unlockAudio();state='playing';setOverlay(null);ui.pauseButton.hidden=false;lastFrame=performance.now();accumulator=0;arena.focus({preventScroll:true});requestFrame();}
+ function resetInput(){keys.clear();releasePointer();targetX=player.x;targetY=player.y;}
+ function visibilityChanged(){
+  resetInput();lastFrame=performance.now();accumulator=0;
+  if(document.hidden){if(audio&&audio.state==='running')audio.suspend().then(()=>{if(!document.hidden)unlockAudio();}).catch(()=>{});}
+  else{unlockAudio();requestFrame();}
+ }
  function emit(x,y,color,count=16){for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=35+Math.random()*180;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.35+Math.random()*.45,color,size:1+Math.random()*3});}if(particles.length>100)particles.splice(0,particles.length-100);}
  function nextGoal(clear,perfect,previousBest){
   if(!clear)return `あと${(Math.ceil((DURATION-elapsed)*10-1e-7)/10).toFixed(1)}秒でクリア。もう一度、飛ぼう。`;
@@ -168,30 +175,39 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   if(clear){elapsed=DURATION;emit(W/2,H*.4,'#5affef',perfect?40:24);emit(W/2,H*.45,perfect?'#f8df8a':'#ff4c99',24);}
   else{shake=reduced?0:9;burstFlash=reduced?0:.16;emit(player.x,player.y,'#5affef',30);}
   score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50+bonus;sound(clear?(perfect?'perfect':'clear'):'hit');
-  const newBest=score>best;best=Math.max(best,score);try{localStorage.setItem('neon-dodge-best-v1',String(best));}catch(_){}
-  updateHUD();ui.pauseButton.hidden=true;ui.runHint.hidden=true;ui.runLabel.hidden=true;ui.resultScreen.classList.toggle('clear',clear);ui.resultScreen.classList.toggle('perfect',perfect);
+  const newBest=score>best;best=Math.max(best,score);try{localStorage.setItem('neon-dodge-best-v3-30s',String(best));}catch(_){}
+  updateHUD();ui.runHint.hidden=true;ui.runLabel.hidden=true;ui.resultScreen.classList.toggle('clear',clear);ui.resultScreen.classList.toggle('perfect',perfect);
   ui.resultTitle.innerHTML=perfect?'<span class="perfect-word">PERFECT</span><span>CLEAR</span>':clear?'<span>CLEAR</span>':'<span>GAME</span><span>OVER</span>';
   ui.resultEmblem.textContent=perfect?'✦':clear?'✓':'×';ui.resultEyebrow.textContent=perfect?'FLAWLESS FLIGHT.':clear?'A LITTLE SCARRED. STILL FLYING.':'SPARK WILL FLY AGAIN.';
   ui.resultSubtitle.textContent=nextGoal(clear,perfect,previousBest);
   ui.rareVisitor.hidden=!rareSeen;ui.rareVisitor.textContent=rareSeen?'今回の珍客：'+RARE_NAMES[rareSeen]:'';
   ui.resultScore.textContent=format(score);ui.survival.textContent=elapsed.toFixed(1)+'s';ui.dodged.textContent=String(dodges);ui.bonus.textContent='BONUS +'+bonus;ui.resultNear.textContent=String(nearCount);ui.resultHits.textContent=hits+' / 3';
-  ui.resultBest.textContent=(newBest?'NEW BEST!  ':'PERSONAL BEST  ')+format(best);ui.startBest.textContent=format(best);setOverlay('resultScreen');$('againButton').focus({preventScroll:true});
+  ui.resultBest.textContent=(newBest?'NEW BEST!  ':'30s BEST  ')+format(best);ui.startBest.textContent=format(best);setOverlay('resultScreen');$('againButton').focus({preventScroll:true});
  }
  function makeObstacle(lane,rare=false){
-  const size=38+Math.random()*17,type=rare?RARE_TYPES[Math.floor(Math.random()*RARE_TYPES.length)]:NORMAL_TYPES[Math.floor(Math.random()*NORMAL_TYPES.length)];
-  // A small spawn offset removes permanent safe corridors, while keeping straight falls.
-  const jitter=(Math.random()*2-1)*(elapsed<3?12:16);
-  const x=clamp(40+lane*80+jitter,size/2+8,W-size/2-8);
-  return {x,lane,y:-50,w:size,h:size*.8,speed:285+elapsed*12,type,rare,passed:false,contacted:false,nearCandidate:false,nearBlocked:false,closestGap:Infinity,nearPoint:null,color:type==='crystal'?'#bf8bff':type==='drone'?'#ff79bb':rare?'#f8df8a':'#ff4c99'};
+  const size=38+Math.random()*14,type=rare?RARE_TYPES[Math.floor(Math.random()*RARE_TYPES.length)]:NORMAL_TYPES[Math.floor(Math.random()*NORMAL_TYPES.length)];
+  const jitter=(Math.random()*2-1)*16,phase=Math.random()*Math.PI*2,direction=Math.random()<.5?-1:1;
+  const profile=rare?{speed:195,spread:35,amp:17,rate:.8}:type==='meteor'?{speed:170,spread:35,amp:27,rate:.5}:type==='crystal'?{speed:250,spread:40,amp:24,rate:.7}:type==='drone'?{speed:200,spread:35,amp:30,rate:1.5}:{speed:215,spread:40,amp:0,rate:0};
+  const amp=profile.amp,margin=size/2+8;
+  const baseX=clamp(40+lane*80+jitter,margin+amp,W-margin-amp);
+  const x=baseX+Math.sin(phase)*amp;
+  return {x,baseX,lane,y:-50,w:size,h:size*.8,speed:(profile.speed+Math.random()*profile.spread)*(elapsed<5?.92:elapsed<25?1:1.04),age:0,amp,rate:profile.rate,phase,direction,type,rare,passed:false,contacted:false,nearCandidate:false,nearBlocked:false,nearAwarded:false,nearAway:0,closestGap:Infinity,nearPoint:null,color:type==='crystal'?'#bf8bff':type==='drone'?'#ff79bb':rare?'#f8df8a':'#ff4c99'};
+ }
+ function moveObstacle(o,dt){
+  o.age=(o.age||0)+dt;
+  if(o.amp)o.x=o.baseX+Math.sin(o.phase+o.age*o.rate*o.direction)*o.amp;
+  o.y+=o.speed*(1+.06*Math.sin(o.age*.9+(o.phase||0)))*dt;
  }
  function spawn(){
-  // At most two separated lanes per wave. Rare visitors replace a normal hazard.
+  // Gentle rhythm, at most two per wave and six total, including delayed visitors.
+  const phase=waveIndex%4,room=6-obstacles.length-pendingSpawns.length;
+  if(room<1)return .22;
   const lanes=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[lanes[i],lanes[j]]=[lanes[j],lanes[i]];}
-  const phase=waveIndex%4,count=elapsed<3?1:phase===0||phase===3?1:2;
+  const count=Math.min(room,elapsed<5?1:phase===1||phase===2?2:1);
   const rare=waveIndex===rareWave&&!rareSpawned;obstacles.push(makeObstacle(lanes[0],rare));if(rare)rareSpawned=true;
-  if(count===2){const second=lanes.find(l=>Math.abs(l-lanes[0])>=2),obstacle=makeObstacle(second);if(phase===2)pendingSpawns.push({delay:.18,obstacle});else obstacles.push(obstacle);}
+  if(count===2){const second=lanes.find(l=>Math.abs(l-lanes[0])>=2),obstacle=makeObstacle(second);if(phase===2)pendingSpawns.push({delay:.28,obstacle});else obstacles.push(obstacle);}
   waveIndex++;
-  return elapsed<3?.82:[.78,.72,.84,.76][phase];
+  return elapsed<5?1.15:[1.08,1.15,1.12,1.0][phase];
  }
  function obstacleGap(p,o){const nx=clamp(p.x,o.x-o.w/2,o.x+o.w/2),ny=clamp(p.y,o.y-o.h/2,o.y+o.h/2);return Math.hypot(p.x-nx,p.y-ny)-p.r;}
  function takeHit(o){
@@ -206,37 +222,48 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   sound('damage');return true;
  }
  function collides(p,o){return obstacleGap(p,o)<0;}
+ function minPlayerY(){return Math.max(180,Math.min(H*.48,145/drawHeight*H));}
  function step(dt){
-  if(state!=='playing')return;
+  if(state!=='playing'||document.hidden)return;
   const remain=DURATION-elapsed;dt=Math.min(dt,remain);
   invulnerable=Math.max(0,invulnerable-dt);shieldPulse=Math.max(0,shieldPulse-dt);warningTime=Math.max(0,warningTime-dt);nearToastTime=Math.max(0,nearToastTime-dt);damageToastTime=Math.max(0,damageToastTime-dt);
   for(const effect of flybyEffects)effect.life-=dt;flybyEffects=flybyEffects.filter(effect=>effect.life>0);
-  if(keys.has('ArrowLeft')||keys.has('a'))targetX-=420*dt;if(keys.has('ArrowRight')||keys.has('d'))targetX+=420*dt;targetX=clamp(targetX,26,W-26);
-  const oldX=player.x;player.x+=clamp(targetX-player.x,-1200*dt,1200*dt);
+  const kx=Number(keys.has('ArrowRight')||keys.has('d'))-Number(keys.has('ArrowLeft')||keys.has('a'));
+  const ky=Number(keys.has('ArrowDown')||keys.has('s'))-Number(keys.has('ArrowUp')||keys.has('w'));
+  if(kx||ky){const length=Math.hypot(kx,ky);targetX=player.x+kx/length*360*dt;targetY=player.y+ky/length*360*dt;}
+  targetX=clamp(targetX,26,W-26);targetY=clamp(targetY,minPlayerY(),H-62);
+  const oldX=player.x,oldY=player.y,dx=targetX-player.x,dy=targetY-player.y,distance=Math.hypot(dx,dy),fraction=distance?Math.min(1,840*dt/distance):0;
+  player.x+=dx*fraction;player.y+=dy*fraction;
   const desiredBank=reduced?0:clamp((player.x-oldX)/Math.max(dt,.0001)/900,-.22,.22);bank+=(desiredBank-bank)*(1-Math.exp(-14*dt));
+  const desiredThrust=reduced?0:clamp((oldY-player.y)/Math.max(dt,.0001)/500,-.25,1);thrust+=(desiredThrust-thrust)*(1-Math.exp(-12*dt));
   elapsed=Math.min(DURATION,elapsed+dt);
   for(const p of pendingSpawns){p.delay-=dt;if(p.delay<=0)obstacles.push(p.obstacle);}pendingSpawns=pendingSpawns.filter(p=>p.delay>0);
-  spawnClock-=dt;if(spawnClock<=0&&elapsed<8.2)spawnClock+=spawn();
-  let nearAwards=0,normalAwards=0,nearXTotal=0;
-  // Resolve all contacts first: never award a near miss during a damage event.
-  for(const o of obstacles){o.y+=o.speed*dt;if(o.rare&&o.y+o.h/2>=0&&o.y-o.h/2<H)rareSeen=o.type;if(!o.contacted&&collides(player,o)){takeHit(o);if(state!=='playing')return;}}
+  spawnClock-=dt;if(spawnClock<=0&&elapsed<DURATION-2.2)spawnClock+=spawn();
+  let nearAwards=0,normalAwards=0,nearXTotal=0,nearYTotal=0;
+  // Collisions remain active everywhere, even after a previous close pass.
+  for(const o of obstacles){moveObstacle(o,dt);if(o.rare&&o.y+o.h/2>=0&&o.y-o.h/2<H)rareSeen=o.type;if(!o.contacted&&collides(player,o)){takeHit(o);if(state!=='playing')return;}}
   for(const o of obstacles){
    const gap=obstacleGap(player,o);
-   if(!o.contacted&&!o.passed&&gap>=0&&gap<NEAR_MARGIN){if(invulnerable>0){o.nearBlocked=true;o.nearCandidate=false;}else if(!o.nearBlocked){
-    o.nearCandidate=true;
-    if(gap<(o.closestGap??Infinity)){o.closestGap=gap;o.nearPoint={x1:player.x,y1:player.y,x2:clamp(player.x,o.x-o.w/2,o.x+o.w/2),y2:clamp(player.y,o.y-o.h/2,o.y+o.h/2)};}
-   }}
-   if(!o.passed&&o.y-o.h/2>player.y+player.r+NEAR_MARGIN){
-    o.passed=true;
-    if(!o.contacted){dodges++;if(o.nearCandidate&&!o.nearBlocked&&invulnerable<=0){nearCount++;nearAwards++;
-      const point=o.nearPoint||{x1:player.x,y1:player.y,x2:o.x,y2:player.y};nearXTotal+=(point.x1+point.x2)/2;
-      flybyEffects.push({...point,life:.32});if(flybyEffects.length>6)flybyEffects.shift();}else normalAwards++;}
+   if(!o.contacted&&!o.nearAwarded&&gap>=0&&gap<NEAR_MARGIN){
+    o.nearAway=0;
+    if(invulnerable>0){o.nearBlocked=true;o.nearCandidate=false;}
+    else if(!o.nearBlocked){o.nearCandidate=true;if(gap<o.closestGap){o.closestGap=gap;o.nearPoint={x1:player.x,y1:player.y,x2:clamp(player.x,o.x-o.w/2,o.x+o.w/2),y2:clamp(player.y,o.y-o.h/2,o.y+o.h/2)};}}
    }
+   // A close pass completes only after genuine separation, on either axis.
+   if(o.nearCandidate&&!o.contacted&&!o.nearAwarded&&!o.nearBlocked){
+    o.nearAway=gap>NEAR_MARGIN+10?(o.nearAway||0)+dt:0;
+    if(o.nearAway>=.10&&invulnerable<=0){o.nearAwarded=true;o.nearCandidate=false;nearCount++;nearAwards++;
+     const point=o.nearPoint;nearXTotal+=(point.x1+point.x2)/2;nearYTotal+=(point.y1+point.y2)/2;
+     flybyEffects.push({...point,life:.32});if(flybyEffects.length>6)flybyEffects.shift();
+    }
+   }
+   // Ordinary dodge points are final once the hazard leaves the playable arena.
+   if(!o.passed&&o.y-o.h/2>H){o.passed=true;if(!o.contacted){dodges++;normalAwards++;}}
   }
-  if(nearAwards){nearToastPoints=nearToastTime>.35?nearToastPoints+nearAwards*50:nearAwards*50;nearToastTime=.7;nearAnchorX=nearXTotal/nearAwards;ui.nearToast.textContent='NEAR! +'+nearToastPoints;sound('near');emit(player.x,player.y-25,'#5affef',5);}
+  if(nearAwards){nearToastPoints=nearToastTime>.35?nearToastPoints+nearAwards*50:nearAwards*50;nearToastTime=.7;nearAnchorX=nearXTotal/nearAwards;nearAnchorY=nearYTotal/nearAwards;ui.nearToast.textContent='NEAR! +'+nearToastPoints;sound('near');emit(nearAnchorX,nearAnchorY,'#5affef',5);}
   else if(normalAwards)sound('dodge');
   obstacles=obstacles.filter(o=>o.y-o.h/2<H+30);score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50;
-  const seconds=Math.ceil(DURATION-elapsed);if(seconds<lastSecond){lastSecond=seconds;if(seconds>0&&seconds<=3)sound('tick');}ui.runHint.hidden=elapsed>2.5;
+  const seconds=Math.ceil(DURATION-elapsed);if(seconds<lastSecond){lastSecond=seconds;if(seconds>0&&seconds<=5)sound('tick');}ui.runHint.hidden=elapsed>3;
   if(elapsed>=DURATION-1e-8)finish(true);
  }
  function drawBackground(t){
@@ -252,7 +279,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function drawShip(x,y,t){
   ctx.save();ctx.translate(x,y);ctx.rotate(bank);
   if(invulnerable>0&&!reduced)ctx.globalAlpha=.55+.45*Math.abs(Math.sin(t*24));
-  const flame=reduced?30:29+Math.sin(t*38)*6;
+  const flame=reduced?30:29+Math.sin(t*38)*6+thrust*15;
   const g=ctx.createLinearGradient(0,15,0,58);g.addColorStop(0,'#83fff2bb');g.addColorStop(1,'#5affef00');
   for(const side of [-1,1]){const ex=side*11;path([[ex-4,17],[ex+4,17],[ex+2,flame+17],[ex,flame+27],[ex-2,flame+17]],g);}
   ctx.shadowColor='#5affef';ctx.shadowBlur=reduced?0:10;
@@ -270,7 +297,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function drawObstacle(o){
   const x=o.x-o.w/2,y=o.y-o.h/2,type=o.type||'block';
   const trail=ctx.createLinearGradient(0,y-50,0,y);trail.addColorStop(0,o.color+'00');trail.addColorStop(1,o.color+'22');ctx.fillStyle=trail;ctx.fillRect(x,y-50,o.w,50);
-  ctx.save();ctx.translate(o.x,o.y);ctx.scale(o.w/50,o.h/40);ctx.shadowColor=o.color;ctx.shadowBlur=reduced?0:8;if(o.contacted)ctx.globalAlpha=.3;
+  ctx.save();ctx.translate(o.x,o.y);ctx.scale(o.w/50,o.h/40);if(o.rare&&!reduced)ctx.rotate(Math.sin((o.age||0)*1.4)*.12);ctx.shadowColor=o.color;ctx.shadowBlur=reduced?0:8;if(o.contacted)ctx.globalAlpha=.3;
   if(type==='block'){
    path([[-19,-20],[19,-20],[25,-14],[25,14],[19,20],[-19,20],[-25,14],[-25,-14]],o.color+'22',o.color,1.4);ctx.shadowBlur=0;ctx.strokeStyle=o.color+'88';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-6,-6);ctx.lineTo(6,6);ctx.moveTo(6,-6);ctx.lineTo(-6,6);ctx.stroke();
   }else if(type==='meteor'){
@@ -301,18 +328,21 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   ctx.setTransform(scaleX,0,0,scaleY,0,0);ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake=Math.max(0,shake-dt*35);}drawBackground(sceneryTime);
   if(state==='ready'){[{x:35,y:160,w:32,h:28,color:'#ff4c99'},{x:362,y:355,w:28,h:24,color:'#bf8bff'}].forEach(drawObstacle);}else{obstacles.forEach(drawObstacle);if(state!=='over')drawShip(player.x,player.y,sceneryTime);}
   drawFlybys();
-  for(const p of particles){if(state!=='paused'){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;}ctx.globalAlpha=clamp(p.life*2,0,1);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}particles=particles.filter(p=>p.life>0);ctx.globalAlpha=1;if(burstFlash>0){ctx.fillStyle=`rgba(255,76,153,${burstFlash})`;ctx.fillRect(0,0,W,H);burstFlash=Math.max(0,burstFlash-dt);}ctx.restore();
+  for(const p of particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;ctx.globalAlpha=clamp(p.life*2,0,1);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}particles=particles.filter(p=>p.life>0);ctx.globalAlpha=1;if(burstFlash>0){ctx.fillStyle=`rgba(255,76,153,${burstFlash})`;ctx.fillRect(0,0,W,H);burstFlash=Math.max(0,burstFlash-dt);}ctx.restore();
  }
  function requestFrame(){if(!frameRequested){frameRequested=true;requestAnimationFrame(frame);}}
- function frame(now){frameRequested=false;const dt=Math.min(.1,Math.max(0,(now-lastFrame)/1000));lastFrame=now;if(document.hidden)return;if(state!=='paused')sceneryTime+=dt*(state==='playing'&&elapsed>=7?1.4:1);if(state==='playing'){accumulator+=dt;while(accumulator>=STEP&&state==='playing'){step(STEP);accumulator-=STEP;}updateHUD();}draw(dt);requestFrame();}
- function positionX(e){return (e.clientX-arena.getBoundingClientRect().left)/drawWidth*W;}
- arena.addEventListener('pointerdown',e=>{if(state!=='playing'||e.target.closest('button')||pointerId!==null)return;if(e.pointerType==='mouse'&&e.button!==0)return;e.preventDefault();pointerId=e.pointerId;pointerX=positionX(e);dragStartX=player.x;arena.setPointerCapture(pointerId);if(e.pointerType==='mouse')targetX=clamp(pointerX,26,W-26);});
- arena.addEventListener('pointermove',e=>{if(state!=='playing')return;if(e.pointerType==='mouse'&&pointerId===null){targetX=clamp(positionX(e),26,W-26);return;}if(e.pointerId===pointerId){e.preventDefault();targetX=clamp(dragStartX+positionX(e)-pointerX,26,W-26);}});
- for(const ev of ['pointerup','pointercancel','lostpointercapture'])arena.addEventListener(ev,e=>{if(e.pointerId===pointerId)pointerId=null;});
- document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','a','d'].includes(e.key)&&state==='playing'){e.preventDefault();keys.add(e.key);}if(e.key==='Escape'&&!e.repeat){if(state==='playing')pause();else if(state==='paused')resume();}});
- document.addEventListener('keyup',e=>keys.delete(e.key));
- document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();}else{lastFrame=performance.now();requestFrame();}});window.addEventListener('blur',pause);
- $('playButton').addEventListener('click',begin);$('againButton').addEventListener('click',begin);$('restartButton').addEventListener('click',begin);$('resumeButton').addEventListener('click',resume);ui.pauseButton.addEventListener('click',pause);
+ function frame(now){frameRequested=false;const dt=Math.min(.1,Math.max(0,(now-lastFrame)/1000));lastFrame=now;if(document.hidden)return;sceneryTime+=dt*(state==='playing'&&elapsed>=DURATION-5?1.4:1);if(state==='playing'){accumulator+=dt;while(accumulator>=STEP&&state==='playing'){step(STEP);accumulator-=STEP;}updateHUD();}draw(dt);requestFrame();}
+ function position(e){const r=arena.getBoundingClientRect();return {x:(e.clientX-r.left)/drawWidth*W,y:(e.clientY-r.top)/drawHeight*H};}
+ function setTarget(x,y){targetX=clamp(x,26,W-26);targetY=clamp(y,minPlayerY(),H-62);}
+ arena.addEventListener('pointerdown',e=>{if(state!=='playing'||e.target.closest('button')||pointerId!==null)return;if(e.pointerType==='mouse'&&e.button!==0)return;e.preventDefault();unlockAudio();const p=position(e);pointerId=e.pointerId;pointerX=p.x;pointerY=p.y;dragStartX=player.x;dragStartY=player.y;arena.setPointerCapture(pointerId);if(e.pointerType==='mouse')setTarget(p.x,p.y);});
+ arena.addEventListener('pointermove',e=>{if(state!=='playing')return;const p=position(e);if(e.pointerType==='mouse'&&pointerId===null){setTarget(p.x,p.y);return;}if(e.pointerId===pointerId){e.preventDefault();setTarget(dragStartX+p.x-pointerX,dragStartY+p.y-pointerY);}});
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])arena.addEventListener(ev,e=>{if(e.pointerId===pointerId){pointerId=null;if(ev!=='pointerup'){targetX=player.x;targetY=player.y;}}});
+ document.addEventListener('keydown',e=>{const key=e.key.length===1?e.key.toLowerCase():e.key;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','a','d','w','s'].includes(key)&&state==='playing'){e.preventDefault();unlockAudio();keys.add(key);}});
+ document.addEventListener('keyup',e=>keys.delete(e.key.length===1?e.key.toLowerCase():e.key));
+ document.addEventListener('visibilitychange',visibilityChanged);
+ window.addEventListener('blur',resetInput);
+ window.addEventListener('pageshow',()=>{lastFrame=performance.now();accumulator=0;requestFrame();});
+ $('playButton').addEventListener('click',begin);$('againButton').addEventListener('click',begin);
  ui.soundButton.addEventListener('click',()=>{muted=!muted;updateSoundUI();try{localStorage.setItem('neon-dodge-muted-v1',muted?'1':'0');}catch(_){}if(!muted){unlockAudio();tone(660,.08,'triangle');}});
  updateSoundUI();updateShields();requestFrame();
 })();
