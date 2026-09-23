@@ -49,6 +49,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
 @media(max-height:740px){.rare-visitor{margin-top:6px;padding-top:6px}}
 @media(max-height:590px){.rare-visitor{margin-top:4px;padding-top:4px}.result-subtitle{font-size:11px}}
 /* V3: readable life count; hearts briefly break on damage. */
+.hud::before{content:"";position:absolute;inset:-18px -24px -18px;z-index:-1;background:linear-gradient(#080a19f5,#080a19e8 70%,#080a1900)}
 .shield-metric .metric-label{letter-spacing:1px;color:#c3cbe3}.shield-metric .metric-label span{color:#f4f5ff;font-size:12px;font-variant-numeric:tabular-nums;margin-left:3px}
 .shield-dots{font-family:Arial,sans-serif;gap:5px;margin-top:6px;font-size:24px;color:#ff80b6;text-shadow:0 0 12px #ff4c9955}.shield-dots .empty{color:#454a63;transform:scale(.82);text-shadow:none;animation:heart-break .4s ease-out}.shield-metric.critical .shield-dots{color:#ff619f}
 @keyframes heart-break{0%{color:#fff;transform:scale(1.3)}45%{color:#ff80b6;transform:translateY(-3px) rotate(-15deg)}100%{color:#454a63;transform:scale(.82)}}
