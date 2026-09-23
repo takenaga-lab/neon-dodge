@@ -56,6 +56,11 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
 .run-label{letter-spacing:1px;font-size:10px}.run-hint{letter-spacing:1px}
 @media(max-width:350px){.shield-dots{font-size:21px;gap:3px}.hud{left:16px;right:16px}.metric-label{letter-spacing:1.4px}}
 @media(prefers-reduced-motion:reduce){.shield-dots .empty{animation:none}}
+/* V4: pickups are rings, never hazard silhouettes. */
+.item-toast{position:absolute;z-index:2;transform:translateX(-50%);pointer-events:none;white-space:nowrap;font-size:14px;font-weight:900;text-shadow:0 0 12px currentColor}
+.item-guide{display:flex;gap:13px;font-size:10px;margin-top:12px}.item-guide span:nth-child(1){color:#ffe18b}.item-guide span:nth-child(2){color:#7bffb8}.item-guide span:nth-child(3){color:#75c9ff}.best-line{margin-top:13px}
+@media(max-height:590px){.item-guide{margin-top:8px;font-size:9px}.result-extra{margin-top:5px}}
+@media(max-height:430px) and (orientation:landscape){.item-guide{grid-column:2}}
 </style>
 </head>
 <body>
@@ -68,6 +73,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   <div class="hud" id="hud" hidden><div class="timer-track"><div class="timer-fill" id="timerFill"></div></div><div><div class="metric-label">SCORE</div><div class="metric-value" id="score">0000</div></div><div class="shield-metric" id="shieldMetric"><div class="metric-label">ライフ <span id="lifeCount">3/3</span></div><div class="shield-dots" id="shieldDots" role="status" aria-label="ライフ 残り3"><span id="shield1" aria-hidden="true">♥</span><span id="shield2" aria-hidden="true">♥</span><span id="shield3" aria-hidden="true">♥</span></div></div><div class="time-metric" id="timeMetric"><div class="metric-label">TIME LEFT</div><div class="metric-value"><span id="time">30.0</span><span class="unit">s</span></div></div></div>
   <div class="run-label" id="runLabel" hidden>SURVIVE THE NEON</div>
   <div class="near-toast" id="nearToast" hidden>NEAR! +50</div>
+  <div class="item-toast" id="itemToast" role="status" hidden></div>
   <div class="damage-toast" id="damageToast" hidden>ライフ −1</div>
   <div class="run-hint" id="runHint" hidden>〈 <b>上下左右にスライド</b> 〉</div>
   <section class="overlay" id="startScreen" aria-labelledby="gameTitle">
@@ -78,6 +84,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <div class="mission">3 LIVES. 30 SECONDS.</div>
    <button class="play-button" id="playButton">PLAY <span class="arrow" aria-hidden="true">▶</span></button>
    <p class="instructions"><span class="gesture" aria-hidden="true">✥</span>上下左右にスライドして避ける<span class="keyboard-hint">PC：マウス / ↑ ↓ ← → キー</span></p>
+   <div class="item-guide"><span>★ +200</span><span>♥ 回復</span><span>◉ 無敵3秒</span></div>
    <div class="best-line">30s BEST <strong id="startBest">0000</strong></div>
   </section>
   <section class="overlay result-overlay" id="resultScreen" aria-labelledby="resultTitle" hidden>
@@ -85,19 +92,19 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    <div class="eyebrow" id="resultEyebrow">SO CLOSE. GO AGAIN.</div>
    <h2 class="result-title" id="resultTitle"><span>GAME</span><span>OVER</span></h2>
    <p class="result-subtitle" id="resultSubtitle">あと少し。もう一度、飛び込もう。</p>
-   <div class="score-card"><div class="metric-label">YOUR SCORE</div><div class="total" id="resultScore">0000</div><div class="score-details"><span>生存 <strong id="survival">0.0s</strong></span><span>回避 <strong id="dodged">0</strong></span><span id="bonus">BONUS +0</span></div><div class="result-extra"><span>NEAR <strong id="resultNear">0</strong></span><span>被弾 <strong id="resultHits">0 / 3</strong></span></div><div class="rare-visitor" id="rareVisitor" hidden></div></div>
+   <div class="score-card"><div class="metric-label">YOUR SCORE</div><div class="total" id="resultScore">0000</div><div class="score-details"><span>生存 <strong id="survival">0.0s</strong></span><span>回避 <strong id="dodged">0</strong></span><span id="bonus">BONUS +0</span></div><div class="result-extra"><span>NEAR <strong id="resultNear">0</strong></span><span>被弾 <strong id="resultHits">0 / 3</strong></span></div><div class="result-extra"><span>アイテム <strong id="resultItems">0個 / +0</strong></span></div><div class="rare-visitor" id="rareVisitor" hidden></div></div>
    <button class="play-button" id="againButton">PLAY AGAIN <span class="arrow" aria-hidden="true">↗</span></button>
    <div class="result-best" id="resultBest">30s BEST 0000</div>
   </section>
  </section>
- <footer class="footer"><span class="edition">V3 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
+ <footer class="footer"><span class="edition">V4 / NEON DODGE</span><span>STAY SHARP. STAY ALIVE.</span></footer>
 </main>
 <script>
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
  const arena = $('arena'), canvas = $('canvas'), ctx = canvas.getContext('2d');
- const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits','damageToast','rareVisitor','lifeCount'].map(id=>[id,$(id)]));
+ const ui = Object.fromEntries(['hud','score','time','timeMetric','timerFill','startScreen','resultScreen','runHint','runLabel','resultTitle','resultScore','resultSubtitle','resultEyebrow','resultEmblem','survival','dodged','bonus','resultBest','startBest','soundButton','soundWaves','soundSlash','shieldMetric','shieldDots','shield1','shield2','shield3','nearToast','resultNear','resultHits','damageToast','rareVisitor','lifeCount','itemToast','resultItems'].map(id=>[id,$(id)]));
  const W = 400, H = 680, DURATION = 30, STEP = 1 / 120;
  const MAX_HITS=3, INVULNERABLE=.75, NEAR_MARGIN=12;
  const RARE_NAMES={banana:'バナナ',donut:'ドーナツ',alien:'エイリアン'};
@@ -105,6 +112,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
  let state='ready', elapsed=0, spawnClock=0, dodges=0, score=0, best=0, muted=false;
+ let lives=3, itemPoints=0, itemCount=0, barrier=0, barrierWarned=false, itemToastTime=0, items=[], itemSchedule=[], itemRetry=0;
  let hits=0, invulnerable=0, shieldPulse=0, warningTime=0, nearCount=0, nearToastTime=0, nearToastPoints=0;
  let damageToastTime=0, nearAnchorX=W/2, nearAnchorY=H-174, rareSeen='', flybyEffects=[];
  let waveIndex=0, rareWave=-1, rareSpawned=false, pendingSpawns=[], bank=0, thrust=0;
@@ -128,6 +136,10 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   if(kind==='start'){tone(440,.1,'triangle');tone(660,.12,'triangle',.09);tone(880,.17,'triangle',.18);}
   else if(kind==='dodge')tone(760,.055,'sine',0,1120);
   else if(kind==='near'){tone(1047,.055,'sine');tone(1568,.08,'sine',.045);}
+  else if(kind==='star'){tone(1175,.09,'triangle');tone(1760,.13,'sine',.07);}
+  else if(kind==='heart'){tone(659,.12,'sine');tone(880,.16,'sine',.09);tone(1319,.18,'sine',.18);}
+  else if(kind==='barrier'){tone(330,.2,'triangle',0,990);tone(1320,.16,'sine',.1);}
+  else if(kind==='barrier-end'){tone(660,.08,'sine');tone(440,.1,'sine',.13);}
   else if(kind==='damage'){tone(230,.13,'triangle',0,85);tone(120,.09,'sawtooth');}
   else if(kind==='hit'){tone(150,.36,'sawtooth',0,30);tone(75,.22,'triangle');}
   else if(kind==='clear'||kind==='perfect'){[523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',i*.1));if(kind==='perfect')tone(1568,.26,'sine',.42);}
@@ -136,22 +148,23 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function resize(){const r=arena.getBoundingClientRect();drawWidth=Math.max(1,r.width);drawHeight=Math.max(1,r.height);const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(drawWidth*dpr);canvas.height=Math.round(drawHeight*dpr);scaleX=canvas.width/W;scaleY=canvas.height/H;}
  new ResizeObserver(resize).observe(arena); resize();
  function updateShields(){
-  const remaining=MAX_HITS-hits;
+  const remaining=lives;
   for(let i=1;i<=MAX_HITS;i++){const empty=i>remaining;ui['shield'+i].textContent='♥';ui['shield'+i].classList.toggle('empty',empty);}
   ui.lifeCount.textContent=remaining+'/3';ui.shieldDots.setAttribute('aria-label',`ライフ 残り${remaining}`);ui.shieldMetric.classList.toggle('critical',remaining===1);
  }
  function updateHUD(){
   ui.score.textContent=format(score);ui.time.textContent=(Math.ceil(Math.max(0,DURATION-elapsed)*10-1e-7)/10).toFixed(1);ui.timerFill.style.transform=`scaleX(${Math.max(0,1-elapsed/DURATION)})`;ui.timeMetric.classList.toggle('urgent',elapsed>=DURATION-5);
-  ui.runLabel.classList.toggle('critical',hits===2);ui.runLabel.classList.toggle('final-stretch',elapsed>=DURATION-5&&hits<2);
-  ui.runLabel.textContent=hits===2?'あと1回で終了 — 落ち着いて避けよう':elapsed>=DURATION-5?'あと5秒、駆け抜けろ！':elapsed<5?'30秒、生き残ろう':'N-01 SPARK / FREE FLIGHT';
-  ui.nearToast.hidden=nearToastTime<=0||state!=='playing';
+  ui.runLabel.classList.toggle('critical',lives===1);ui.runLabel.classList.toggle('final-stretch',elapsed>=DURATION-5&&lives>1);
+  ui.runLabel.textContent=barrier>0?'無敵バリア '+barrier.toFixed(1)+'秒':lives===1?'あと1回で終了 — 落ち着いて避けよう':elapsed>=DURATION-5?'あと5秒、駆け抜けろ！':elapsed<5?'30秒、生き残ろう':'N-01 SPARK / FREE FLIGHT';
+  ui.nearToast.hidden=nearToastTime<=0||itemToastTime>0||state!=='playing';
+  ui.itemToast.hidden=itemToastTime<=0||state!=='playing';ui.itemToast.style.left=(clamp(player.x,80,W-80)/W*100)+'%';ui.itemToast.style.top=(clamp(player.y-90,135,H-100)/H*100)+'%';
   ui.nearToast.style.left=(clamp(nearAnchorX,70,W-70)/W*100)+'%';ui.nearToast.style.top=(clamp(nearAnchorY-40,135,H-70)/H*100)+'%';
   ui.damageToast.hidden=damageToastTime<=0||state!=='playing';ui.damageToast.style.left=(clamp(player.x,65,W-65)/W*100)+'%';ui.damageToast.style.top=(clamp(player.y-62,135,H-70)/H*100)+'%';
  }
  function setOverlay(which){for(const key of ['startScreen','resultScreen'])ui[key].hidden=key!==which;}
  function releasePointer(){if(pointerId!==null&&arena.hasPointerCapture(pointerId))arena.releasePointerCapture(pointerId);pointerId=null;}
  function begin(){
-  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;nearAnchorY=H-174;rareSeen='';flybyEffects=[];bank=0;thrust=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?5+Math.floor(Math.random()*15):-1;updateShields();dodges=0;score=0;lastSecond=DURATION;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;player.y=H-112;targetX=player.x;targetY=player.y;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
+  unlockAudio();state='playing';elapsed=0;spawnClock=.3;hits=0;lives=3;itemPoints=0;itemCount=0;barrier=0;barrierWarned=false;itemToastTime=0;items=[];itemRetry=0;itemSchedule=[{at:4+Math.random(),kind:'star'},{at:13+Math.random()*2,kind:'support'}];if(Math.random()<.55)itemSchedule.push({at:22+Math.random(),kind:'support'});invulnerable=0;shieldPulse=0;warningTime=0;nearCount=0;nearToastTime=0;nearToastPoints=0;damageToastTime=0;nearAnchorX=W/2;nearAnchorY=H-174;rareSeen='';flybyEffects=[];bank=0;thrust=0;waveIndex=0;pendingSpawns=[];rareSpawned=false;rareWave=Math.random()<.30?5+Math.floor(Math.random()*15):-1;updateShields();dodges=0;score=0;lastSecond=DURATION;obstacles=[];particles=[];keys.clear();releasePointer();player.x=W/2;player.y=H-112;targetX=player.x;targetY=player.y;shake=0;burstFlash=0;accumulator=0;lastFrame=performance.now();
   setOverlay(null);ui.hud.hidden=false;ui.runHint.hidden=false;ui.runLabel.hidden=false;ui.runLabel.textContent='SURVIVE THE NEON';arena.focus({preventScroll:true});updateHUD();sound('start');requestFrame();
  }
  function resetInput(){keys.clear();releasePointer();targetX=player.x;targetY=player.y;}
@@ -172,17 +185,17 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   if(state!=='playing')return;
   const perfect=clear&&hits===0, bonus=clear?(perfect?800:500):0;
   const previousBest=best;
-  state=clear?'clear':'over';keys.clear();releasePointer();pendingSpawns=[];nearToastTime=0;damageToastTime=0;flybyEffects=[];
+  state=clear?'clear':'over';keys.clear();releasePointer();pendingSpawns=[];nearToastTime=0;damageToastTime=0;itemToastTime=0;items=[];barrier=0;flybyEffects=[];
   if(clear){elapsed=DURATION;emit(W/2,H*.4,'#5affef',perfect?40:24);emit(W/2,H*.45,perfect?'#f8df8a':'#ff4c99',24);}
   else{shake=reduced?0:9;burstFlash=reduced?0:.16;emit(player.x,player.y,'#5affef',30);}
-  score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50+bonus;sound(clear?(perfect?'perfect':'clear'):'hit');
+  score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50+itemPoints+bonus;sound(clear?(perfect?'perfect':'clear'):'hit');
   const newBest=score>best;best=Math.max(best,score);try{localStorage.setItem('neon-dodge-best-v3-30s',String(best));}catch(_){}
   updateHUD();ui.runHint.hidden=true;ui.runLabel.hidden=true;ui.resultScreen.classList.toggle('clear',clear);ui.resultScreen.classList.toggle('perfect',perfect);
   ui.resultTitle.innerHTML=perfect?'<span class="perfect-word">PERFECT</span><span>CLEAR</span>':clear?'<span>CLEAR</span>':'<span>GAME</span><span>OVER</span>';
   ui.resultEmblem.textContent=perfect?'✦':clear?'✓':'×';ui.resultEyebrow.textContent=perfect?'FLAWLESS FLIGHT.':clear?'A LITTLE SCARRED. STILL FLYING.':'SPARK WILL FLY AGAIN.';
   ui.resultSubtitle.textContent=nextGoal(clear,perfect,previousBest);
   ui.rareVisitor.hidden=!rareSeen;ui.rareVisitor.textContent=rareSeen?'今回の珍客：'+RARE_NAMES[rareSeen]:'';
-  ui.resultScore.textContent=format(score);ui.survival.textContent=elapsed.toFixed(1)+'s';ui.dodged.textContent=String(dodges);ui.bonus.textContent='BONUS +'+bonus;ui.resultNear.textContent=String(nearCount);ui.resultHits.textContent=hits+' / 3';
+  ui.resultScore.textContent=format(score);ui.survival.textContent=elapsed.toFixed(1)+'s';ui.dodged.textContent=String(dodges);ui.bonus.textContent='BONUS +'+bonus;ui.resultNear.textContent=String(nearCount);ui.resultHits.textContent=hits+' 回';ui.resultItems.textContent=itemCount+'個 / +'+itemPoints;
   ui.resultBest.textContent=(newBest?'NEW BEST!  ':'30s BEST  ')+format(best);ui.startBest.textContent=format(best);setOverlay('resultScreen');$('againButton').focus({preventScroll:true});
  }
  function makeObstacle(lane,rare=false){
@@ -205,21 +218,65 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   if(room<1)return .22;
   const lanes=[0,1,2,3,4];for(let i=4;i>0;i--){const j=Math.floor(Math.random()*(i+1));[lanes[i],lanes[j]]=[lanes[j],lanes[i]];}
   const count=Math.min(room,elapsed<5?1:phase===1||phase===2?2:1);
-  const rare=waveIndex===rareWave&&!rareSpawned;obstacles.push(makeObstacle(lanes[0],rare));if(rare)rareSpawned=true;
-  if(count===2){const second=lanes.find(l=>Math.abs(l-lanes[0])>=2),obstacle=makeObstacle(second);if(phase===2)pendingSpawns.push({delay:.28,obstacle});else obstacles.push(obstacle);}
+  const rare=waveIndex===rareWave&&!rareSpawned;
+  const first=lanes.map(l=>makeObstacle(l,rare)).find(clearOfYoungItems);if(!first)return .22;obstacles.push(first);if(rare)rareSpawned=true;
+  if(count===2){const obstacle=lanes.filter(l=>Math.abs(l-first.lane)>=2).map(l=>makeObstacle(l)).find(clearOfYoungItems);if(obstacle){if(phase===2)pendingSpawns.push({delay:.28,obstacle});else obstacles.push(obstacle);}}
   waveIndex++;
   return elapsed<5?1.15:[1.08,1.15,1.12,1.0][phase];
+ }
+ const ITEM_COLORS={star:'#ffe18b',heart:'#7bffb8',barrier:'#75c9ff'};
+ function collectItem(item){
+  if(item.collected||state!=='playing')return;
+  item.collected=true;itemCount++;
+  let kind=item.kind,message='';
+  if(kind==='heart'&&lives>=MAX_HITS)kind='star';
+  if(kind==='star'){itemPoints+=200;message='STAR +200';}
+  else if(kind==='heart'){lives=Math.min(MAX_HITS,lives+1);warningTime=0;updateShields();message='ライフ +1';}
+  else{barrier=3;barrierWarned=false;message='無敵バリア 3秒';for(const o of obstacles){o.nearCandidate=false;o.closestGap=Infinity;o.nearPoint=null;}}
+  itemToastTime=1.1;ui.itemToast.textContent=message;ui.itemToast.style.color=ITEM_COLORS[kind];emit(item.x,item.y,ITEM_COLORS[kind],20);sound(kind);
+ }
+ function itemLaneClearance(x){
+  let distance=Infinity;
+  for(const o of [...obstacles,...pendingSpawns.map(p=>p.obstacle)]){
+   if(o.contacted)continue;
+   for(let t=0;t<=2.6;t+=.2){
+    const ox=o.amp?o.baseX+Math.sin(o.phase+((o.age||0)+t)*o.rate*o.direction)*o.amp:o.x;
+    const oy=o.y+o.speed*t,iy=-35+145*t;
+    // A generous envelope accounts for curvature, speed modulation, and item labels.
+    distance=Math.min(distance,Math.hypot(Math.max(0,Math.abs(x-ox)-o.w/2),Math.max(0,Math.abs(iy-oy)-o.h/2))-42);
+   }
+  }
+  return distance;
+ }
+ function spawnItem(event){
+  const candidates=[60,116,172,228,284,340].map(x=>({x,d:itemLaneClearance(x),tie:Math.random()}));
+  candidates.sort((a,b)=>b.d-a.d||a.tie-b.tie);
+  if(candidates[0].d<8)return false;
+  const kind=event.kind==='star'?'star':lives<3?(Math.random()<.7?'heart':'barrier'):(Math.random()<.65?'star':'barrier');
+  items.push({x:candidates[0].x,y:-35,r:24,speed:145,kind,age:0,collected:false});return true;
+ }
+ function updateItems(dt){
+  itemRetry=Math.max(0,itemRetry-dt);
+  if(itemSchedule.length&&elapsed>=itemSchedule[0].at&&itemRetry<=0){
+   const event=itemSchedule[0];
+   if(spawnItem(event))itemSchedule.shift();else{itemRetry=.25;if(elapsed>Math.min(event.at+3,25))itemSchedule.shift();}
+  }
+  for(const item of items){item.age+=dt;item.y+=item.speed*dt;if(!item.collected&&Math.hypot(player.x-item.x,player.y-item.y)<player.r+item.r)collectItem(item);}
+  items=items.filter(item=>!item.collected&&item.y-item.r<H+20);
+ }
+ function clearOfYoungItems(o){
+  return items.every(item=>item.age>2.4||Math.abs(o.x-item.x)>o.w/2+o.amp+52);
  }
  function obstacleGap(p,o){const nx=clamp(p.x,o.x-o.w/2,o.x+o.w/2),ny=clamp(p.y,o.y-o.h/2,o.y+o.h/2);return Math.hypot(p.x-nx,p.y-ny)-p.r;}
  function takeHit(o){
   // Contact is permanent for this obstacle, even during the immunity window.
   o.contacted=true;o.nearCandidate=false;
-  if(invulnerable>0||state!=='playing')return false;
-  hits++;damageToastTime=.55;nearToastTime=0;flybyEffects=[];invulnerable=INVULNERABLE;shieldPulse=.42;shake=reduced?0:5;burstFlash=reduced?0:.07;updateShields();
+  if(invulnerable>0||barrier>0||state!=='playing')return false;
+  hits++;lives--;damageToastTime=.55;nearToastTime=0;flybyEffects=[];invulnerable=INVULNERABLE;shieldPulse=.42;shake=reduced?0:5;burstFlash=reduced?0:.07;updateShields();
   for(const other of obstacles)other.nearCandidate=false;
-  emit(player.x,player.y,hits===2?'#ff79bb':'#5affef',16);
-  if(hits>=MAX_HITS){finish(false);return true;}
-  if(hits===2)warningTime=1.15;
+  emit(player.x,player.y,lives===1?'#ff79bb':'#5affef',16);
+  if(lives<=0){finish(false);return true;}
+  if(lives===1)warningTime=1.15;
   sound('damage');return true;
  }
  function collides(p,o){return obstacleGap(p,o)<0;}
@@ -227,7 +284,9 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  function step(dt){
   if(state!=='playing'||document.hidden)return;
   const remain=DURATION-elapsed;dt=Math.min(dt,remain);
-  invulnerable=Math.max(0,invulnerable-dt);shieldPulse=Math.max(0,shieldPulse-dt);warningTime=Math.max(0,warningTime-dt);nearToastTime=Math.max(0,nearToastTime-dt);damageToastTime=Math.max(0,damageToastTime-dt);
+  invulnerable=Math.max(0,invulnerable-dt);shieldPulse=Math.max(0,shieldPulse-dt);warningTime=Math.max(0,warningTime-dt);nearToastTime=Math.max(0,nearToastTime-dt);damageToastTime=Math.max(0,damageToastTime-dt);itemToastTime=Math.max(0,itemToastTime-dt);
+  const oldBarrier=barrier;barrier=Math.max(0,barrier-dt);
+  if(oldBarrier>1&&barrier<=1&&!barrierWarned){barrierWarned=true;sound('barrier-end');}
   for(const effect of flybyEffects)effect.life-=dt;flybyEffects=flybyEffects.filter(effect=>effect.life>0);
   const kx=Number(keys.has('ArrowRight')||keys.has('d'))-Number(keys.has('ArrowLeft')||keys.has('a'));
   const ky=Number(keys.has('ArrowDown')||keys.has('s'))-Number(keys.has('ArrowUp')||keys.has('w'));
@@ -240,6 +299,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   elapsed=Math.min(DURATION,elapsed+dt);
   for(const p of pendingSpawns){p.delay-=dt;if(p.delay<=0)obstacles.push(p.obstacle);}pendingSpawns=pendingSpawns.filter(p=>p.delay>0);
   spawnClock-=dt;if(spawnClock<=0&&elapsed<DURATION-2.2)spawnClock+=spawn();
+  updateItems(dt);
   let nearAwards=0,normalAwards=0,nearXTotal=0,nearYTotal=0;
   // Collisions remain active everywhere, even after a previous close pass.
   for(const o of obstacles){moveObstacle(o,dt);if(o.rare&&o.y+o.h/2>=0&&o.y-o.h/2<H)rareSeen=o.type;if(!o.contacted&&collides(player,o)){takeHit(o);if(state!=='playing')return;}}
@@ -247,13 +307,13 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
    const gap=obstacleGap(player,o);
    if(!o.contacted&&!o.nearAwarded&&gap>=0&&gap<NEAR_MARGIN){
     o.nearAway=0;
-    if(invulnerable>0){o.nearBlocked=true;o.nearCandidate=false;}
+    if(invulnerable>0||barrier>0){o.nearBlocked=true;o.nearCandidate=false;}
     else if(!o.nearBlocked){o.nearCandidate=true;if(gap<o.closestGap){o.closestGap=gap;o.nearPoint={x1:player.x,y1:player.y,x2:clamp(player.x,o.x-o.w/2,o.x+o.w/2),y2:clamp(player.y,o.y-o.h/2,o.y+o.h/2)};}}
    }
    // A close pass completes only after genuine separation, on either axis.
    if(o.nearCandidate&&!o.contacted&&!o.nearAwarded&&!o.nearBlocked){
     o.nearAway=gap>NEAR_MARGIN+10?(o.nearAway||0)+dt:0;
-    if(o.nearAway>=.10&&invulnerable<=0){o.nearAwarded=true;o.nearCandidate=false;nearCount++;nearAwards++;
+    if(o.nearAway>=.10&&invulnerable<=0&&barrier<=0){o.nearAwarded=true;o.nearCandidate=false;nearCount++;nearAwards++;
      const point=o.nearPoint;nearXTotal+=(point.x1+point.x2)/2;nearYTotal+=(point.y1+point.y2)/2;
      flybyEffects.push({...point,life:.32});if(flybyEffects.length>6)flybyEffects.shift();
     }
@@ -263,7 +323,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   }
   if(nearAwards){nearToastPoints=nearToastTime>.35?nearToastPoints+nearAwards*50:nearAwards*50;nearToastTime=.7;nearAnchorX=nearXTotal/nearAwards;nearAnchorY=nearYTotal/nearAwards;ui.nearToast.textContent='NEAR! +'+nearToastPoints;sound('near');emit(nearAnchorX,nearAnchorY,'#5affef',5);}
   else if(normalAwards)sound('dodge');
-  obstacles=obstacles.filter(o=>o.y-o.h/2<H+30);score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50;
+  obstacles=obstacles.filter(o=>o.y-o.h/2<H+30);score=Math.floor(elapsed*100+1e-7)+dodges*25+nearCount*50+itemPoints;
   const seconds=Math.ceil(DURATION-elapsed);if(seconds<lastSecond){lastSecond=seconds;if(seconds>0&&seconds<=5)sound('tick');}ui.runHint.hidden=elapsed>3;
   if(elapsed>=DURATION-1e-8)finish(true);
  }
@@ -293,7 +353,7 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   ctx.shadowBlur=reduced?0:9;ctx.shadowColor='#5affef';path([[0,-18],[3,-12],[3,-2],[0,1],[-3,-2],[-3,-12]],'#5affef');
   for(const side of [-1,1]){ctx.fillStyle='#5affef';ctx.fillRect(side*23-1,7,2,7);ctx.fillStyle='#a5fff5';ctx.fillRect(side*12-1,20,2,6);ctx.fillStyle='#ff77b4';ctx.fillRect(side*13-3,16,6,2);}
   ctx.restore();
-  if(shieldPulse>0||invulnerable>0){ctx.save();const p=1-shieldPulse/.42;ctx.globalAlpha=shieldPulse>0?.3+shieldPulse:.18;ctx.shadowColor=hits===2?'#ff79bb':'#5affef';ctx.shadowBlur=reduced?0:12;ellipse(x,y,31+p*10,36+p*10,null,hits===2?'#ff79bb':'#5affef',shieldPulse>0?2:1);ctx.restore();}
+  if(shieldPulse>0||invulnerable>0){ctx.save();const p=1-shieldPulse/.42;ctx.globalAlpha=shieldPulse>0?.3+shieldPulse:.18;ctx.shadowColor=lives===1?'#ff79bb':'#5affef';ctx.shadowBlur=reduced?0:12;ellipse(x,y,31+p*10,36+p*10,null,lives===1?'#ff79bb':'#5affef',shieldPulse>0?2:1);ctx.restore();}
  }
  function drawObstacle(o){
   const x=o.x-o.w/2,y=o.y-o.h/2,type=o.type||'block';
@@ -316,6 +376,22 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
   }
   ctx.restore();
  }
+ function drawItem(item,t){
+  const color=ITEM_COLORS[item.kind],pulse=reduced?1:1+Math.sin(t*5)*.045;
+  ctx.save();ctx.translate(item.x,item.y);ctx.scale(pulse,pulse);ctx.shadowColor=color;ctx.shadowBlur=reduced?0:16;
+  ellipse(0,0,24,24,'#101e30',color,2.5);ellipse(0,0,29,29,null,color+'55',1);
+  if(item.kind==='star'){const points=[];for(let i=0;i<10;i++){const angle=-Math.PI/2+i*Math.PI/5,r=i%2?7:15;points.push([Math.cos(angle)*r,Math.sin(angle)*r]);}path(points,color,'#fff6d0',1);}
+  else if(item.kind==='heart'){ctx.beginPath();ctx.moveTo(0,13);ctx.bezierCurveTo(-25,-2,-11,-21,0,-9);ctx.bezierCurveTo(11,-21,25,-2,0,13);ctx.fillStyle=color;ctx.fill();}
+  else{path([[0,-15],[13,-10],[11,5],[0,16],[-11,5],[-13,-10]],color+'33',color,2);path([[0,-8],[-4,1],[1,1],[-1,9],[6,-2],[1,-2]],'#e2f6ff');}
+  ctx.shadowBlur=0;ctx.fillStyle='#091320';ctx.fillRect(-23,30,46,18);ctx.font='bold 12px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(item.kind==='star'?'+200':item.kind==='heart'?'+1':'3秒',0,39);ctx.restore();
+ }
+ function drawBarrier(x,y){
+  if(barrier<=0)return;
+  ctx.save();ctx.strokeStyle=barrier<=1?'#d4edff':'#75c9ff';ctx.shadowColor='#75c9ff';ctx.shadowBlur=reduced?0:14;
+  ellipse(x,y,35,40,'#75c9ff12','#75c9ff88',1.5);
+  ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,y,39,44,0,-Math.PI/2,-Math.PI/2+Math.PI*2*barrier/3);ctx.stroke();
+  ctx.shadowBlur=0;ctx.font='bold 10px Arial,sans-serif';ctx.textAlign='center';ctx.fillStyle='#d4edff';ctx.fillText(barrier.toFixed(1)+'s',x,y+59);ctx.restore();
+ }
  function drawFlybys(){
   for(const effect of flybyEffects){
    ctx.save();const alpha=clamp(effect.life/.32,0,1);ctx.globalAlpha=alpha;ctx.strokeStyle='#b8fff2';ctx.lineWidth=1.5;ctx.shadowColor='#5affef';ctx.shadowBlur=reduced?0:9;
@@ -327,8 +403,8 @@ h1{position:relative;font-family:"Arial Black",Arial,sans-serif;font-size:clamp(
  }
  function draw(dt){
   ctx.setTransform(scaleX,0,0,scaleY,0,0);ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake=Math.max(0,shake-dt*35);}drawBackground(sceneryTime);
-  if(state==='ready'){[{x:35,y:160,w:32,h:28,color:'#ff4c99'},{x:362,y:355,w:28,h:24,color:'#bf8bff'}].forEach(drawObstacle);}else{obstacles.forEach(drawObstacle);if(state!=='over')drawShip(player.x,player.y,sceneryTime);}
-  drawFlybys();
+  if(state==='ready'){[{x:35,y:160,w:32,h:28,color:'#ff4c99'},{x:362,y:355,w:28,h:24,color:'#bf8bff'}].forEach(drawObstacle);}else{obstacles.forEach(drawObstacle);items.forEach(item=>drawItem(item,sceneryTime));if(state!=='over')drawShip(player.x,player.y,sceneryTime);}
+  drawBarrier(player.x,player.y);drawFlybys();
   for(const p of particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;ctx.globalAlpha=clamp(p.life*2,0,1);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}particles=particles.filter(p=>p.life>0);ctx.globalAlpha=1;if(burstFlash>0){ctx.fillStyle=`rgba(255,76,153,${burstFlash})`;ctx.fillRect(0,0,W,H);burstFlash=Math.max(0,burstFlash-dt);}ctx.restore();
  }
  function requestFrame(){if(!frameRequested){frameRequested=true;requestAnimationFrame(frame);}}
